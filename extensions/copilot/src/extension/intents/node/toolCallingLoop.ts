@@ -1547,9 +1547,11 @@ export abstract class ToolCallingLoop<TOptions extends IToolCallingLoopOptions =
 			if (m.role !== Raw.ChatRole.Assistant) {
 				continue;
 			}
-			return Array.isArray(m.content) && m.content.some(part =>
+			if (Array.isArray(m.content) && m.content.some(part =>
 				part.type === Raw.ChatCompletionContentPartKind.Opaque && rawPartAsThinkingData(part) !== undefined
-			);
+			)) {
+				return true;
+			}
 		}
 		return false;
 	}

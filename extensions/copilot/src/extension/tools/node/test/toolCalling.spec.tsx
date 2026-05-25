@@ -6,11 +6,13 @@
 import { PromptElement, PromptPiece, PromptSizing, Raw, RenderPromptResult, UserMessage } from '@vscode/prompt-tsx';
 import { beforeEach, expect, suite, test } from 'vitest';
 import { getTextPart, roleToString } from '../../../../platform/chat/common/globalStringUtils';
+import { CustomDataPartMimeTypes } from '../../../../platform/endpoint/common/endpointTypes';
 import { rawPartAsThinkingData } from '../../../../platform/endpoint/common/thinkingDataContainer';
 import { MockEndpoint } from '../../../../platform/endpoint/test/node/mockEndpoint';
 import { ITestingServicesAccessor } from '../../../../platform/test/node/services';
 import { IInstantiationService } from '../../../../util/vs/platform/instantiation/common/instantiation';
 import { LanguageModelTextPart, LanguageModelToolResult } from '../../../../vscodeTypes';
+import { ToolCallingLoop } from '../../../intents/node/toolCallingLoop';
 import { IBuildPromptContext } from '../../../prompt/common/intents';
 import { ToolCallRound } from '../../../prompt/common/toolCallRound';
 import { PromptRenderer } from '../../../prompts/node/base/promptRenderer';
@@ -260,5 +262,47 @@ suite('ChatToolCalls thinking handling', () => {
 		(round as ToolCallRound & { phaseModelId?: string }).phaseModelId = 'gpt-5';
 		const result = await render(endpoint, [round], true);
 		expect(hasThinkingPart(result)).toBe(true);
+	});
+});
+
+suite('ToolCallingLoop messagesContainThinking', () => {
+	test('finds thinking in a later assistant message after the last user', () => {
+		const messages: Raw.ChatMessage[] = [
+			{ role: Raw.ChatRole.System, content: 'system' },
+			{ role: Raw.ChatRole.User, content: 'latest user turn' },
+			{ role: Raw.ChatRole.Assistant, content: [{ type: Raw.ChatCompletionContentPartKind.Text, text: 'tool preamble' }] },
+			{ role: Raw.ChatRole.Tool, content: 'tool result', toolCallId: 'call-1' },
+			{
+				role: Raw.ChatRole.Assistant,
+				content: [{
+					type: Raw.ChatCompletionContentPartKind.Opaque,
+					value: {
+						type: CustomDataPartMimeTypes.ThinkingData,
+						thinking: { id: 'th-1', text: 'reasoning content' }
+					}
+				}]
+			}
+		];
+
+		expect(ToolCallingLoop.messagesContainThinking(messages)).toBe(true);
+	});
+
+	test('ignores assistant messages before the last user', () => {
+		const messages: Raw.ChatMessage[] = [
+			{
+				role: Raw.ChatRole.Assistant,
+				content: [{
+					type: Raw.ChatCompletionContentPartKind.Opaque,
+					value: {
+						type: CustomDataPartMimeTypes.ThinkingData,
+						thinking: { id: 'th-1', text: 'old reasoning content' }
+					}
+				}]
+			},
+			{ role: Raw.ChatRole.User, content: 'latest user turn' },
+			{ role: Raw.ChatRole.Assistant, content: [{ type: Raw.ChatCompletionContentPartKind.Text, text: 'plain answer' }] }
+		];
+
+		expect(ToolCallingLoop.messagesContainThinking(messages)).toBe(false);
 	});
 });
