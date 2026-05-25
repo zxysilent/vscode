@@ -744,14 +744,16 @@ export class AnthropicLMProvider extends AbstractLanguageModelChatProvider {
 					}
 					pendingToolCall = undefined;
 				} else if (pendingThinking) {
-					if (pendingThinking.signature) {
-						const finalThinkingPart = new LanguageModelThinkingPart('');
-						finalThinkingPart.metadata = {
-							signature: pendingThinking.signature,
-							_completeThinking: pendingThinking.thinking
-						};
-						progress.report(finalThinkingPart);
-					}
+					// Always create the final thinking part so thinking blocks are preserved
+					// for round-tripping to upstreams (including third-party Anthropic-compatible
+					// APIs like DeepSeek/Kimi/GLM that require thinking blocks to be passed back).
+					// Signature may be empty for some compatible upstreams.
+					const finalThinkingPart = new LanguageModelThinkingPart('');
+					finalThinkingPart.metadata = {
+						signature: pendingThinking.signature || '',
+						_completeThinking: pendingThinking.thinking
+					};
+					progress.report(finalThinkingPart);
 					pendingThinking = undefined;
 				} else if (pendingRedactedThinking) {
 					pendingRedactedThinking = undefined;

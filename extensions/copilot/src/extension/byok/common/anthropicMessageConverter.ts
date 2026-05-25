@@ -21,14 +21,33 @@ function apiContentToAnthropicContent(content: (LanguageModelTextPart | Language
 					data: part.metadata.redactedData,
 				});
 			} else if (part.metadata?._completeThinking) {
-				// Only push thinking block when we have the complete thinking marker
+				// Complete thinking block with signature marker
 				convertedContent.push({
 					type: 'thinking',
 					thinking: part.metadata._completeThinking,
 					signature: part.metadata.signature || '',
 				});
+			} else {
+				// Incremental thinking parts or parts without _completeThinking metadata:
+				// third-party Anthropic-compatible upstreams (DeepSeek/Kimi/GLM/MiniMax/etc.)
+				// require all thinking blocks to be passed back. Use whatever text we have.
+				const thinkingText = typeof part.value === 'string'
+					? part.value
+					: Array.isArray(part.value) ? part.value.join('') : '';
+				if (thinkingText.trim()) {
+					// Merge with an existing thinking block at the end if one was just added
+					const lastBlock = convertedContent.at(-1);
+					if (lastBlock?.type === 'thinking') {
+						lastBlock.thinking = (lastBlock.thinking + '\n' + thinkingText).trim();
+					} else {
+						convertedContent.push({
+							type: 'thinking',
+							thinking: thinkingText,
+							signature: part.metadata?.signature || '',
+						});
+					}
+				}
 			}
-			// Skip incremental thinking parts - we only care about the complete one
 		} else if (part instanceof LanguageModelToolCallPart) {
 			convertedContent.push({
 				type: 'tool_use',

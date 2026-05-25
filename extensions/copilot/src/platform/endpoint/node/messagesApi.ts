@@ -462,6 +462,15 @@ function rawContentToAnthropicContent(content: readonly Raw.ChatCompletionConten
 								type: 'redacted_thinking',
 								data: opaqueValue.thinking.encrypted,
 							});
+						} else if (thinkingText) {
+							// Thinking text present but no encrypted signature:
+							// third-party Anthropic-compatible upstreams (DeepSeek/Kimi/GLM/etc.)
+							// require thinking blocks to be passed back even without signature.
+							convertedContent.push({
+								type: 'thinking',
+								thinking: thinkingText,
+								signature: '',
+							});
 						}
 					}
 				}

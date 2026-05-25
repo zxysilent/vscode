@@ -213,6 +213,7 @@ export class CustomEndpointOAIEndpoint extends OpenAIEndpoint {
 			headers['x-api-key'] = this._apiKey;
 			headers['anthropic-version'] = '2023-06-01';
 			Object.assign(headers, this.getAnthropicBetaHeader());
+			headers['Authorization'] = `Bearer ${this._apiKey}`;
 		} else if (this._modelUrl.includes('openai.azure')) {
 			headers['api-key'] = this._apiKey;
 		} else {
