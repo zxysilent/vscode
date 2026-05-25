@@ -387,7 +387,9 @@ export class ChatStatusWorkspaceIndexingStatus extends Disposable {
 			this._statusItem.detail = '';
 		}
 
-		this._statusItem.tooltip = values.tooltip;
+		if (Object.hasOwn(this._statusItem, 'tooltip')) {
+			this._statusItem.tooltip = values.tooltip;
+		}
 	}
 
 	private registerCommands(): IDisposable {

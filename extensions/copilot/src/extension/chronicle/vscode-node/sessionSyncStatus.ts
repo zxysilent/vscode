@@ -74,48 +74,54 @@ export class SessionSyncStatus extends Disposable {
 		// description → shown as badge in collapsed header (icon + message)
 		// detail → shown when expanded
 
+		let tooltip: string | undefined;
+
 		switch (state.kind) {
 			case 'not-enabled':
 				this._statusItem.description = l10n.t('Not enabled');
 				this._statusItem.detail = `[${l10n.t('Enable?')}](command:workbench.action.openSettings?%5B%22chat.sessionSync.enabled%22%5D)`;
-				this._statusItem.tooltip = l10n.t('Session sync is not enabled. Your data stays local to this device.');
+				tooltip = l10n.t('Session sync is not enabled. Your data stays local to this device.');
 				break;
 
 			case 'disabled-by-policy':
 				this._statusItem.description = `$(warning) ${l10n.t('Disabled by policy')}`;
 				this._statusItem.detail = '';
-				this._statusItem.tooltip = l10n.t('Session sync is disabled by your organization\'s policy.');
+				tooltip = l10n.t('Session sync is disabled by your organization\'s policy.');
 				break;
 
 			case 'on':
 				this._statusItem.description = `$(check) ${l10n.t('Enabled')}`;
 				this._statusItem.detail = `[${l10n.t('Show insights?')}](command:workbench.action.chat.open?%7B%22query%22%3A%22%2Fchronicle%3Atips%22%7D)`;
-				this._statusItem.tooltip = l10n.t('Your sessions are being synced and available across devices.');
+				tooltip = l10n.t('Your sessions are being synced and available across devices.');
 				break;
 
 			case 'up-to-date':
 				this._statusItem.description = `$(check) ${l10n.t('{0} sessions synced', state.syncedCount)}`;
 				this._statusItem.detail = `[${l10n.t('Show insights?')}](command:workbench.action.chat.open?%7B%22query%22%3A%22%2Fchronicle%3Atips%22%7D)`;
-				this._statusItem.tooltip = l10n.t('Your sessions are being synced and available across devices.');
+				tooltip = l10n.t('Your sessions are being synced and available across devices.');
 				break;
 
 			case 'syncing':
 				this._statusItem.description = `$(loading~spin) ${l10n.t('Syncing {0} session(s)\u2026', state.sessionCount)}`;
 				this._statusItem.detail = '';
-				this._statusItem.tooltip = l10n.t('Syncing {0} session(s)\u2026', state.sessionCount);
+				tooltip = l10n.t('Syncing {0} session(s)\u2026', state.sessionCount);
 				break;
 
 			case 'deleting':
 				this._statusItem.description = `$(loading~spin) ${l10n.t('Deleting {0} session(s)\u2026', state.sessionCount)}`;
 				this._statusItem.detail = '';
-				this._statusItem.tooltip = l10n.t('Deleting {0} session(s)\u2026', state.sessionCount);
+				tooltip = l10n.t('Deleting {0} session(s)\u2026', state.sessionCount);
 				break;
 
 			case 'error':
 				this._statusItem.description = `$(error) ${l10n.t('Sync error')}`;
 				this._statusItem.detail = '';
-				this._statusItem.tooltip = l10n.t('Something went wrong during the last sync. Try again later.');
+				tooltip = l10n.t('Something went wrong during the last sync. Try again later.');
 				break;
+		}
+
+		if (Object.hasOwn(this._statusItem, 'tooltip')) {
+			this._statusItem.tooltip = tooltip;
 		}
 	}
 }
