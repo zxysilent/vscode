@@ -84,15 +84,6 @@ export class TelemetryService extends BaseTelemetryService {
 				if (event.callSite === NO_FETCH_TELEMETRY) {
 					return;
 				}
-				/* __GDPR__
-					"fetchTelemetry" : {
-						"owner": "lramos15",
-						"comment": "Telemetry about fetch requests made by the extension, tracking request counts and latency per call site.",
-						"callSite": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The call site identifier for the fetch request." },
-						"latencyMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "The latency of the fetch request in milliseconds." },
-						"statusCode": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "The HTTP status code returned by the fetch request." }
-					}
-				*/
 				this.sendMSFTTelemetryEvent('fetchTelemetry', {
 					callSite: new TelemetryTrustedValue(event.callSite),
 				}, {

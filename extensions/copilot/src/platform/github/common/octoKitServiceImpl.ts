@@ -513,13 +513,6 @@ export class OctoKitService extends BaseOctoKitService implements IOctoKitServic
 			if (errorCode) {
 				properties.errorCode = errorCode;
 			}
-
-			/* __GDPR__
-				"pr.getAssignableUsersFailed" : {
-					"errorCode": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth" },
-					"usedSuggestedActors": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryErrorEvent('pr.getAssignableUsersFailed', properties);
 			return [];
 		}

@@ -100,16 +100,6 @@ export class CodebaseTool implements vscode.LanguageModelTool<ICodebaseToolParam
 			new LanguageModelPromptTsxPart(promptTsxResult)
 		]);
 		references = getUniqueReferences(references);
-
-		/* __GDPR__
-			"codebaseToolInvoked" : {
-				"owner": "roblourens",
-				"comment": "Tracks the timing and result count of codebase tool invocations",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"resultCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of results returned", "isMeasurement": true },
-				"durationMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Duration of the codebase search in milliseconds", "isMeasurement": true }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('codebaseToolInvoked', {
 			requestId: options.chatRequestId,
 		}, {

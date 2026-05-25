@@ -136,17 +136,6 @@ export class NewNotebookTool implements ICopilotTool<IBuildPromptContext> {
 	}
 	async sendTelemetry(outcome: 'noStream' | 'failedToCreatePlanningEndpoint' | 'failedToRenderPlanningPrompt' | 'failedToMakePlanningRequest' | 'failedToRenderNewNotebookPrompt' | 'planningFailed' | 'noOutline' | 'unknownError' | 'success', options: vscode.LanguageModelToolInvocationOptions<IBuildPromptContext>) {
 		const model = options.model && (await this.endpointProvider.getChatEndpoint(options.model)).model;
-
-		/* __GDPR__
-			"newNotebookTool.outcome" : {
-				"owner": "donjayamanne",
-				"comment": "Tracks the outcome of new notebook tool",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The outcome of the tool call." },
-				"isNotebook": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the document is a notebook (this measure is used to identify notebook related telemetry)." },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model used for the request." }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('newNotebookTool.outcome',
 			{ requestId: options.chatRequestId, outcome, model }, { isNotebook: 1 }
 		);

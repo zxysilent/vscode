@@ -225,15 +225,6 @@ export class GitCommitMessageServiceImpl implements IGitCommitMessageService {
 
 		// Compute survival rate
 		const survivalRateFourGram = compute4GramTextSimilarity(commit.message, commitMessage.message);
-
-		/* __GDPR__
-			"git.generateCommitMessageSurvival" : {
-				"owner": "lszomoru",
-				"comment": "Tracks how much of the generated git commit message has survived",
-				"attemptCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "How many times the user has retried." },
-				"survivalRateFourGram": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The rate between 0 and 1 of how much of the suggested git commit message was used when the code change was committed." }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('git.generateCommitMessageSurvival', undefined, { attemptCount: commitMessage.attemptCount, survivalRateFourGram });
 
 		// Delete commit message

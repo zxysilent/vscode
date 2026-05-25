@@ -92,18 +92,6 @@ export class FindFilesTool implements ICopilotTool<IFindFilesToolParams> {
 		const model = options.model && (await this.endpointProvider.getChatEndpoint(options.model)).model;
 		const isMultiRoot = this.workspaceService.getWorkspaceFolders().length > 1;
 		const query = options.input.query;
-		/* __GDPR__
-			"findFilesToolInvoked" : {
-				"owner": "roblourens",
-				"comment": "Telemetry for the findFiles tool in multi-root workspaces",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that invoked the tool" },
-				"isMultiRoot": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the workspace has multiple root folders" },
-				"queryScopedToFolder": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the query was resolved to a specific workspace folder" },
-				"queryStartsWithFolderPath": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the raw query starts with a workspace folder absolute path" },
-				"queryContainsFolderPath": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the raw query contains a workspace folder absolute path anywhere" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('findFilesToolInvoked', {
 			requestId: options.chatRequestId,
 			model,

@@ -736,19 +736,6 @@ export class BackgroundTodoProcessor {
 		completionTokens?: number,
 		model?: string,
 	): void {
-		/* __GDPR__
-			"backgroundTodoAgent" : {
-				"owner": "vritant24",
-				"comment": "Tracks background todo agent pass outcomes.",
-				"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The outcome of the background todo pass." },
-				"conversationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Id for the current chat conversation." },
-				"chatRequestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The chat request ID." },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model ID used." },
-				"duration": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Duration in ms." },
-				"promptTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Prompt token count." },
-				"completionTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Completion token count." }
-			}
-		*/
 		telemetryService.sendMSFTTelemetryEvent('backgroundTodoAgent', {
 			outcome,
 			conversationId,

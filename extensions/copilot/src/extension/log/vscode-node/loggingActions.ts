@@ -491,19 +491,6 @@ function collectFetcherTelemetry(accessor: ServicesAccessor): void {
 		for (const fetcher of fetchers) {
 			const requestStartTime = Date.now();
 			try {
-				/* __GDPR__
-					"fetcherTelemetry" : {
-						"owner": "chrmarti",
-						"comment": "Telemetry event to test connectivity of different fetcher implementations.",
-						"requestGroupId": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Id to group requests from the same run." },
-						"clientLibrary": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The fetcher library used for this request." },
-						"extensionKind": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether the extension runs locally or remotely." },
-						"remoteName": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The remote name, if any." },
-						"electronfetch": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Probe result for the electron-fetch fetcher." },
-						"nodefetch": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Probe result for the node-fetch fetcher." },
-						"nodehttp": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Probe result for the node-http fetcher." }
-					}
-				*/
 				const properties: Record<string, string> = {
 					requestGroupId,
 					clientLibrary: fetcher.getUserAgentLibrary(),

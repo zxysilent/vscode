@@ -30,17 +30,6 @@ export class BaseTelemetryService implements ITelemetryService {
 			if (!token) {
 				return;
 			}
-			/* __GDPR__
-				"token" : {
-					"owner": "digitarald",
-					"comment": "Copilot token received from the service.",
-					"snippyEnabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "If the block setting for public suggestions is enabled." },
-					"telemetryEnabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "If the subscription has telemetry enabled." },
-					"mcpEnabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "If the token has MCP features enabled." },
-					"previewEnabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "If the token has editor preview features enabled." },
-					"reviewEnabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "If the token has Copilot code review features enabled." }
-				}
-			*/
 			this.sendMSFTTelemetryEvent('token', undefined, {
 				snippyEnabled: token.isPublicSuggestionsEnabled() ? 1 : 0,
 				telemetryEnabled: token.isTelemetryEnabled() ? 1 : 0,
@@ -146,18 +135,7 @@ export class BaseTelemetryService implements ITelemetryService {
 		this._sharedProperties['abexp.assignmentcontext'] = new TelemetryTrustedValue(value);
 	}
 
-	// __GDPR__COMMON__ "capi.assignmentcontext" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
 	setSharedProperty(name: string, value: string): void {
-		/* __GDPR__
-			"query-expfeature" : {
-				"ABExp.queriedFeature": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-			}
-		*/
-		/* __GDPR__
-			"call-tas-error" : {
-				"errortype": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth"}
-			}
-		*/
 		if (name === 'abexp.assignmentcontext') {
 			this._setOriginalExpAssignments(value);
 			return;

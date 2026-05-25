@@ -138,27 +138,6 @@ export class RouterDecisionFetcher {
 				query,
 			].join('\n'),
 		});
-
-		/* __GDPR__
-			"automode.routerDecision" : {
-				"owner": "lramos15",
-				"comment": "Reports the routing decision made by the auto mode router API",
-				"conversationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The conversation ID in which the routing decision was made." },
-				"vscodeRequestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The VS Code chat request id in which the routing decision was made." },
-				"routingMethod": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The routing method used for this request (empty=server default, binary, hydra). Identifies the A/B/C experiment path." },
-				"fallback": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the router signaled a fallback to default automod selection." },
-				"fallbackReason": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The reason provided by the server when fallback is true." },
-				"candidateModel": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The top candidate model recommended by the router before any sticky-provider or vision overrides are applied." },
-				"confidence": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The confidence score of the routing decision" },
-				"latencyMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "The latency of the router API call in milliseconds" },
-				"e2eLatencyMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "The end-to-end latency of the router request in milliseconds, including network overhead" },
-				"stickyOverride": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the router applied a sticky override (1) or not (0)" },
-				"scoreReasoning": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Hydra per-dimension score for reasoning. -1 if not present in the response." },
-				"scoreCodeGen": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Hydra per-dimension score for code generation. -1 if not present in the response." },
-				"scoreDebugging": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Hydra per-dimension score for debugging. -1 if not present in the response." },
-				"scoreToolUse": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Hydra per-dimension score for tool use. -1 if not present in the response." }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('automode.routerDecision',
 			{
 				conversationId: conversationId ?? '',

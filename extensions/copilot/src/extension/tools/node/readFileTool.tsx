@@ -338,23 +338,6 @@ export class ReadFileTool implements ICopilotTool<ReadFileParams> {
 		const skillInfo = extensionSkillInfo || (uri && this.customInstructionsService.getSkillInfo(uri));
 		const fileType = skillInfo ? 'skill' : '';
 		const nameField = extensionSkillInfo ? extensionSkillInfo.skillName : skillInfo ? getCachedSha256Hash(skillInfo.skillName) : '';
-
-		/* __GDPR__
-			"readFileToolInvoked" : {
-				"owner": "roblourens",
-				"comment": "The read_file tool was invoked",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"interactionId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current interaction." },
-				"toolOutcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the invocation was successful, or a failure reason" },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that invoked the tool" },
-				"linesRead": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of lines that were read" },
-				"truncated": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The file length was truncated" },
-				"isV2": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the tool is a v2 version" },
-				"isEntireFile": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the entire file was read with v2 params" },
-				"fileType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The type of file being read" },
-				"nameField": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The name of the agent customization. Plain text for extension sources, otherwise hashed." }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('readFileToolInvoked',
 			{
 				requestId: options.chatRequestId,

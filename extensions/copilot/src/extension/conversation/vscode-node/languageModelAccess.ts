@@ -664,18 +664,6 @@ export class CopilotLanguageModelWrapper extends Disposable {
 			..._endpoint,
 			modelMaxPromptTokens: tokenLimit
 		}, LanguageModelAccessPrompt, { noSafety: extensionId === this._envService.extensionId, messages: _messages }).render();
-
-		/* __GDPR__
-			"languagemodelrequest" : {
-				"owner": "jrieken",
-				"comment": "Data about extensions using the language model",
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that is being used" },
-				"extensionId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The extension identifier for which we make the request" },
-				"extensionVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The extension version for which we make the request" },
-				"tokenCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of tokens" },
-				"tokenLimit": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of tokens that can be used" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent(
 			'languagemodelrequest',
 			{

@@ -170,18 +170,6 @@ export class GhostTextComputer {
 			const statistics = this.contextproviderStatistics.getStatisticsForCompletion(id);
 			const opportunityId = options?.opportunityId ?? 'unknown';
 			for (const [providerId, statistic] of statistics.getAllUsageStatistics()) {
-				/* __GDPR__
-					"context-provider.completion-stats" : {
-						"owner": "dirkb",
-						"comment": "Telemetry for copilot inline completion context",
-						"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request correlation id" },
-						"opportunityId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The opportunity id" },
-						"providerId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The context provider id" },
-						"resolution": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The resolution of the context" },
-						"usage": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "How the context was used" },
-						"usageDetails": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Additional details about the usage as a JSON string" }
-					}
-				*/
 				this.telemetryService.sendMSFTTelemetryEvent(
 					'context-provider.completion-stats',
 					{

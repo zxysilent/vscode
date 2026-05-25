@@ -338,26 +338,6 @@ export class CodeSearchChunkSearch extends Disposable {
 				}
 			}
 		}
-
-		/* __GDPR__
-			"codeSearchChunkSearch.isAvailable" : {
-				"owner": "mjbvz",
-				"comment": "Metadata about the code search availability check",
-				"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-				"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-				"codeSearchUnavailableReason": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Reason why code search is unavailable" },
-				"repoStatues": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Detailed info about the statues of the repos in the workspace" },
-				"execTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "How long the check too to complete" },
-				"hasExternalIngest": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether external ingest is enabled" },
-				"indexedRepoCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of indexed repositories" },
-				"notYetIndexedRepoCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of repositories that have not yet been indexed" },
-
-				"indexedRepoLocation.workspace": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of repositories that map exactly to a workspace folder" },
-				"indexedRepoLocation.parent": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of repositories that map to a parent folder" },
-				"indexedRepoLocation.sub": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of repositories that map to a sub-folder" },
-				"indexedRepoLocation.unknown": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of repositories that map to an unknown folder" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('codeSearchChunkSearch.isAvailable', {
 			workspaceSearchSource: searchTelemetryInfo?.callTracker,
 			workspaceSearchCorrelationId: searchTelemetryInfo?.correlationId,
@@ -679,19 +659,6 @@ export class CodeSearchChunkSearch extends Disposable {
 			} finally {
 				localSearchCts.dispose(true);
 			}
-
-			/* __GDPR__
-				"codeSearchChunkSearch.search.success" : {
-					"owner": "mjbvz",
-					"comment": "Information about successful code searches",
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-					"diffSearchStrategy": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Search strategy for the diff" },
-					"chunkCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of returned chunks just from code search" },
-					"locallyChangedFileCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of files that are different than the code search index" },
-					"codeSearchOutOfSync": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Tracks if the local commit we think code search has indexed matches what code search actually has indexed" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('codeSearchChunkSearch.search.success', {
 				workspaceSearchSource: telemetryInfo.callTracker.toString(),
 				workspaceSearchCorrelationId: telemetryInfo.correlationId,
@@ -730,16 +697,6 @@ export class CodeSearchChunkSearch extends Disposable {
 					: undefined
 			};
 		}, (execTime, status) => {
-			/* __GDPR__
-				"codeSearchChunkSearch.perf.searchFileChunks" : {
-					"owner": "mjbvz",
-					"comment": "Total time for searchFileChunks to complete",
-					"status": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "If the call succeeded or failed" },
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-					"execTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Time in milliseconds that the call took" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('codeSearchChunkSearch.perf.searchFileChunks', {
 				status,
 				workspaceSearchSource: telemetryInfo.callTracker.toString(),
@@ -795,14 +752,6 @@ export class CodeSearchChunkSearch extends Disposable {
 
 	@LogExecTime(self => self._logService, 'CodeSearchChunkSearch::doCodeSearch', function (execTime, status) {
 		// Old name used for backwards compatibility with old telemetry
-		/* __GDPR__
-			"codeSearchChunkSearch.perf.doCodeSearchWithRetry" : {
-				"owner": "mjbvz",
-				"comment": "Total time for doCodeSearch to complete",
-				"status": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "If the call succeeded or failed" },
-				"execTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Time in milliseconds that the call took" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('codeSearchChunkSearch.perf.doCodeSearchWithRetry', { status }, { execTime });
 	})
 	private async doCodeSearch(query: WorkspaceChunkQueryWithEmbeddings, repos: readonly CodeSearchRepo[], sizing: StrategySearchSizing, options: WorkspaceChunkSearchOptions, telemetryInfo: TelemetryCorrelationId, token: CancellationToken): Promise<SemanticCodeSearchResult | undefined> {
@@ -823,15 +772,6 @@ export class CodeSearchChunkSearch extends Disposable {
 		} else {
 			this._logService.trace(`CodeSearch.triggerIndexing(${triggerReason}) failed. ${triggerResult.err.id}`);
 		}
-
-		/* __GDPR__
-			"codeSearchChunkSearch.triggerRemoteIndexing" : {
-				"owner": "mjbvz",
-				"comment": "Triggers of remote indexing",
-				"triggerReason": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "How the call was triggered" },
-				"error": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "How the trigger call failed" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('codeSearchChunkSearch.triggerRemoteIndexing', {
 			triggerReason: triggerReason,
 			error: triggerResult.isError() ? triggerResult.err.id : undefined,

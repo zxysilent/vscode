@@ -125,15 +125,6 @@ export class EditToolLearningService implements IEditToolLearningService {
 			}
 
 			const target = Number(targetState) as State;
-
-			/* __GDPR__
-				"editToolLearning.transition" : {
-					"owner": "connor4312",
-					"comment": "Tracks state transitions in the edit tool learning system.",
-					"modelId": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Model ID" },
-					"state": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "State the model transitioned to", "isMeasurement": true }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('editToolLearning.transition', { modelId }, {
 				state: target,
 			});

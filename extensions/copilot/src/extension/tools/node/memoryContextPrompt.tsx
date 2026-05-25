@@ -164,16 +164,6 @@ export class MemoryContextPrompt extends PromptElement<MemoryContextPromptProps>
 	}
 
 	private _sendContextReadTelemetry(hasUserMemory: boolean, userMemoryLength: number, sessionFileCount: number, sessionMemoryLength: number): void {
-		/* __GDPR__
-			"memoryContextRead" : {
-				"owner": "digitarald",
-				"comment": "Tracks automatic memory context reads during prompt construction",
-				"hasUserMemory": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether user memory content was loaded" },
-				"userMemoryLength": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "String length of user memory content" },
-				"sessionFileCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of session memory files listed" },
-				"sessionMemoryLength": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "String length of session memory file listing" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('memoryContextRead', {
 			hasUserMemory: String(hasUserMemory),
 		}, {

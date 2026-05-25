@@ -639,14 +639,6 @@ export class CopilotCloudSessionsProvider extends Disposable implements vscode.C
 
 		// Track unexpected status codes (429 rate-limit, 5xx, etc.) as errors so they surface in dashboards
 		if (result.statusCode !== undefined && !CCA_KNOWN_STATUS_CODES.has(result.statusCode)) {
-			/* __GDPR__
-				"copilot.codingAgent.CCAIsEnabledUnexpectedStatus" : {
-					"owner": "joshspicer",
-					"comment": "Fired when the /enabled endpoint returns an unexpected HTTP status code (e.g. 429 rate-limit or 5xx).",
-					"statusCode": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The unexpected HTTP status code returned by the /enabled endpoint." },
-					"isRateLimited": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "True if the status code is 429 (rate limited)." }
-				}
-			*/
 			this.telemetry.sendTelemetryErrorEvent('copilot.codingAgent.CCAIsEnabledUnexpectedStatus', { microsoft: true, github: false }, {
 				statusCode: String(result.statusCode),
 				isRateLimited: String(result.statusCode === 429),
@@ -1699,13 +1691,6 @@ export class CopilotCloudSessionsProvider extends Disposable implements vscode.C
 		// -- Process each button press in order of precedence
 
 		if (!selection || selection === this.CANCEL.toUpperCase() || token.isCancellationRequested) {
-			/* __GDPR__
-				"copilotcloud.chat.confirmationCancelled" : {
-					"owner": "joshspicer",
-					"comment": "Event sent when the cloud chat confirmation flow is cancelled.",
-					"tokenCancelled": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the cancellation token was already cancelled." }
-				}
-			*/
 			this.telemetry.sendMSFTTelemetryEvent('copilotcloud.chat.confirmationCancelled', {
 				tokenCancelled: String(token.isCancellationRequested)
 			});
@@ -1982,18 +1967,6 @@ export class CopilotCloudSessionsProvider extends Disposable implements vscode.C
 		const partnerAgentId = chatResource ? this.sessionPartnerAgentMap.get(chatResource) : undefined;
 		const partnerAgent = HARDCODED_PARTNER_AGENTS.find(agent => agent.id === partnerAgentId);
 		const modelId = chatResource ? this.sessionModelMap.get(chatResource) : undefined;
-
-		/* __GDPR__
-			"copilotcloud.chat.invoke" : {
-				"owner": "joshspicer",
-				"comment": "Event sent when a Copilot Cloud chat request is made.",
-				"chatRequestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The unique chat request ID." },
-				"hasChatSessionItem": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Invoked with a chat session item." },
-				"isUntitled": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Indicates if the chat session is untitled." },
-				"partnerAgent": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The partner agent name (e.g., Copilot, Claude, Codex)." },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The selected model ID." }
-			}
-		*/
 		this.telemetry.sendMSFTTelemetryEvent('copilotcloud.chat.invoke', {
 			chatRequestId: request.id,
 			hasChatSessionItem: String(!!context.chatSessionContext?.chatSessionItem),
@@ -2463,13 +2436,6 @@ export class CopilotCloudSessionsProvider extends Disposable implements vscode.C
 
 	private async addFollowUpToExistingPR(pullRequestNumber: number, userPrompt: string, summary?: string, targetAgent = 'copilot'): Promise<string | undefined> {
 		try {
-			/* __GDPR__
-				"copilotcloud.chat.followupComment" : {
-					"owner": "joshspicer",
-					"comment": "Event sent when a follow-up comment is delegated to an existing pull request.",
-					"targetAgent": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The target @agent for the follow-up comment." }
-				}
-			*/
 			this.telemetry.sendMSFTTelemetryEvent('copilotcloud.chat.followupComment', {
 				targetAgent,
 			});
@@ -2514,12 +2480,6 @@ export class CopilotCloudSessionsProvider extends Disposable implements vscode.C
 		while (Date.now() - startTime < maxWaitTime && (!token || !token.isCancellationRequested)) {
 			const jobInfo = await this._octoKitService.getJobByJobId(owner, repo, jobId, 'vscode-copilot-chat', CLOUD_SESSIONS_AUTH_OPTIONS);
 			if (jobInfo && jobInfo.pull_request && jobInfo.pull_request.number) {
-				/* __GDPR__
-					"copilotcloud.chat.remoteAgentJobPullRequestReady" : {
-						"owner": "joshspicer",
-						"comment": "Event sent when a remote agent job first returns pull request information."
-					}
-				*/
 				this.telemetry.sendMSFTTelemetryEvent('copilotcloud.chat.remoteAgentJobPullRequestReady');
 				GenAiMetrics.incrementCloudPrReadyCount(this._otelService);
 				this.logService.trace(`Job ${jobId} now has pull request #${jobInfo.pull_request.number}`);
@@ -2570,11 +2530,6 @@ export class CopilotCloudSessionsProvider extends Disposable implements vscode.C
 			const truncationResult = await vscode.window.showWarningMessage(
 				vscode.l10n.t('Prompt size exceeded'), { modal: true, detail: vscode.l10n.t('Your prompt will be truncated to fit within cloud agent\'s context window. This may affect the quality of the response.') }, CONTINUE_TRUNCATION);
 			const userCancelled = token?.isCancellationRequested || !truncationResult || truncationResult !== CONTINUE_TRUNCATION;
-			/* __GDPR__
-				"copilot.codingAgent.truncation" : {
-					"isCancelled" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-				}
-			*/
 			this.telemetry.sendTelemetryEvent('copilot.codingAgent.truncation', { microsoft: true, github: false }, {
 				isCancelled: String(userCancelled),
 			});
@@ -2612,14 +2567,6 @@ export class CopilotCloudSessionsProvider extends Disposable implements vscode.C
 				...(head_ref && { head_ref }),
 			}
 		};
-
-		/* __GDPR__
-			"copilotcloud.chat.remoteAgentJobInvoke" : {
-				"owner": "joshspicer",
-				"comment": "Event sent when a remote agent job invocation starts.",
-				"hasHeadRef": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether a head ref was provided for delegation." }
-			}
-		*/
 		this.telemetry.sendMSFTTelemetryEvent('copilotcloud.chat.remoteAgentJobInvoke', {
 			hasHeadRef: String(!!head_ref)
 		});

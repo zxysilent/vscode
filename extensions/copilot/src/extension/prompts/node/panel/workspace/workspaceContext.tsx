@@ -80,17 +80,6 @@ export class WorkspaceChunks extends PromptElement<ChunksToolProps, WorkspaceChu
 				}, this.props.telemetryInfo, progress, token),
 				token);
 		}, (execTime, status, result) => {
-			/* __GDPR__
-				"workspaceContext.perf.prepareWorkspaceChunks" : {
-					"owner": "mjbvz",
-					"comment": "Understanding the performance of including workspace context",
-					"status": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "If the call succeeded or failed" },
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-					"execTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Time in milliseconds that the call took" },
-					"resultChunkCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of chunks returned" }
-				}
-			*/
 			this.telemetryService.sendMSFTTelemetryEvent('workspaceContext.perf.prepareWorkspaceChunks', {
 				status,
 				workspaceSearchSource: this.props.telemetryInfo.callTracker.toString(),

@@ -97,24 +97,6 @@ export class ExtensionStateCommandContribution extends Disposable implements IEx
 		lines.push('[ExtensionState] ===============================================================');
 
 		this._logService.info(lines.join('\n'));
-
-		/* __GDPR__
-			"extensionState" : {
-				"owner": "TylerLeonhardt",
-				"comment": "Extension state diagnostic information",
-				"hasAnySession": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether a GitHub session exists" },
-				"hasPermissiveSession": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether a permissive GitHub session exists" },
-				"hasCopilotToken": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether a Copilot token exists" },
-				"proxySupport": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The http.proxySupport setting value" },
-				"proxyConfigured": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether an http proxy is configured" },
-				"languageModelsLoaded": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether language models are loaded" },
-				"copilotProviderRegistered": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the Copilot chat provider is registered" },
-				"copilotEmbeddingsRegistered": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether Copilot embeddings models are registered" },
-				"languageModelCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of language models loaded", "isMeasurement": true },
-				"copilotModelCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of Copilot chat models", "isMeasurement": true },
-				"toolCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of tools loaded", "isMeasurement": true }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent(
 			'extensionState',
 			{

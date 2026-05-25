@@ -310,15 +310,6 @@ class BPETokenizer extends Disposable implements ITokenizer {
 
 					if (Math.random() < 1 / 1000) {
 						worker.proxy.resetStats().then(stats => {
-							/* __GDPR__
-								"tokenizer.stats" : {
-									"owner": "jrieken",
-									"comment": "Perf stats about tokenizers",
-									"callCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "How often tokenize was called" },
-									"encodeDuration": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Average time encode took" },
-									"textLength": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Average length of text that got encoded" }
-								}
-							*/
 							this._telemetryService.sendMSFTTelemetryEvent('tokenizer.stats', undefined, stats);
 						});
 					}

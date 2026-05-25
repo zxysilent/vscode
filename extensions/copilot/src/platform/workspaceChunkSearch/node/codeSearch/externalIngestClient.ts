@@ -155,15 +155,6 @@ export class ExternalIngestClient extends Disposable implements IExternalIngestC
 		if (response.ok) {
 			return response;
 		}
-
-		/* __GDPR__
-			"externalIngestClient.post.error" : {
-				"owner": "copilot-core",
-				"comment": "Logging when a external ingest request fails",
-				"path": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The API path that was called" },
-				"statusCode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The response status code" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('externalIngestClient.post.error', {
 			path: pathId,
 		}, { statusCode: response.status });

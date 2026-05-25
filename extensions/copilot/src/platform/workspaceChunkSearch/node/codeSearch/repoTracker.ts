@@ -211,13 +211,6 @@ export class CodeSearchRepoTracker extends Disposable {
 				const updatedRepo = await this._gitService.getRepository(repo.rootUri);
 				if (!updatedRepo && !this._simulationTestContext.isInSimulationTests) {
 					this._logService.trace(`CodeSearchRepoTracker.openRepo(${repo.rootUri}). No current repo found after status check.`);
-
-					/* __GDPR__
-						"codeSearchRepoTracker.openGitRepo.error.noCurrentRepo" : {
-							"owner": "mjbvz",
-							"comment": "Information about errors when trying to resolve a remote"
-						}
-					*/
 					this._telemetryService.sendMSFTTelemetryEvent('codeSearchRepoTracker.openGitRepo.error.noCurrentRepo');
 
 					this.closeRepo(repo);
@@ -233,14 +226,6 @@ export class CodeSearchRepoTracker extends Disposable {
 				if (initToken.isCancellationRequested) {
 					return;
 				}
-
-				/* __GDPR__
-					"codeSearchRepoTracker.openGitRepo.remoteInfo" : {
-						"owner": "mjbvz",
-						"comment": "Information about the remote",
-						"resolvedRemoteType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Identifies the primary remote's type " }
-					}
-				*/
 				this._telemetryService.sendMSFTTelemetryEvent('codeSearchRepoTracker.openGitRepo.remoteInfo', {}, {
 					resolvedRemoteType: this.getRemoteTypeForTelemetry(remoteInfos, repo),
 				});
@@ -251,14 +236,6 @@ export class CodeSearchRepoTracker extends Disposable {
 					this._telemetryService.sendInternalMSFTTelemetryEvent('codeSearchRepoTracker.error.couldNotResolveRemote.internal', {
 						remoteUrls: JSON.stringify(coalesce(repo.remoteFetchUrls ?? [])),
 					});
-
-					/* __GDPR__
-						"codeSearchRepoTracker.openGitRepo.error.couldNotResolveRemote" : {
-							"owner": "mjbvz",
-							"comment": "Information about errors when trying to resolve a remote",
-							"repoRemoteFetchUrlsCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of remote fetch urls on the git repo" }
-						}
-					*/
 					this._telemetryService.sendMSFTTelemetryEvent('codeSearchRepoTracker.openGitRepo.error.couldNotResolveRemote', {}, {
 						repoRemoteFetchUrlsCount: repo.remoteFetchUrls?.length ?? 0,
 					});

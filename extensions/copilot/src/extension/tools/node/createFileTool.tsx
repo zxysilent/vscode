@@ -222,14 +222,6 @@ export class CreateFileTool implements ICopilotTool<ICreateFileParams> {
 	}
 
 	private sendTelemetry(requestId: string | undefined, model: string | undefined, fileExtension: string) {
-		/* __GDPR__
-			"createFileToolInvoked" : {
-				"owner": "bhavyaus",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that invoked the tool" },
-				"fileExtension": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The file extension of the created file" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('createFileToolInvoked', {
 			requestId,
 			model,

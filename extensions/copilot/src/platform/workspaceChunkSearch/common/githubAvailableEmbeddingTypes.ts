@@ -131,13 +131,6 @@ export class GithubAvailableEmbeddingTypesService implements IGithubAvailableEmb
 		}
 
 		if (!response.ok) {
-			/* __GDPR__
-				"githubAvailableEmbeddingTypes.getAvailableTypes.error" : {
-					"owner": "mjbvz",
-					"comment": "Information about failed githubAvailableEmbeddingTypes calls",
-					"statusCode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The response status code" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('githubAvailableEmbeddingTypes.getAvailableTypes.error', {}, {
 				statusCode: response.status,
 			});
@@ -174,15 +167,6 @@ export class GithubAvailableEmbeddingTypesService implements IGithubAvailableEmb
 				primary.push(resolvedType);
 			}
 		}
-
-		/* __GDPR__
-			"githubAvailableEmbeddingTypes.getAvailableTypes.success" : {
-				"owner": "mjbvz",
-				"comment": "Information about successful githubAvailableEmbeddingTypes calls",
-				"primaryEmbeddingTypes": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "List of primary embedding types" },
-				"deprecatedEmbeddingTypes": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "List of deprecated embedding types" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('githubAvailableEmbeddingTypes.getAvailableTypes.success', {
 			primaryEmbeddingTypes: primary.map(type => type.id).join(','),
 			deprecatedEmbeddingTypes: deprecated.map(type => type.id).join(','),
@@ -195,14 +179,6 @@ export class GithubAvailableEmbeddingTypesService implements IGithubAvailableEmb
 		const result = await this.getAllAvailableTypes(silent);
 		if (!result.isOk()) {
 			this._logService.info(`GithubAvailableEmbeddingTypesManager: Could not find any available embedding types. Error: ${result.err.type}`);
-
-			/* __GDPR__
-				"githubAvailableEmbeddingTypes.getPreferredType.error" : {
-					"owner": "mjbvz",
-					"comment": "Information about failed githubAvailableEmbeddingTypes calls",
-					"error": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The reason why the request failed" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('githubAvailableEmbeddingTypes.getPreferredType.error', {
 				error: result.err.type,
 			});

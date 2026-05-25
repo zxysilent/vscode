@@ -1365,17 +1365,6 @@ export class CopilotCLIChatSessionParticipant extends Disposable {
 		const hasChatSessionItem = String(!!chatSessionContext?.chatSessionItem);
 		const isUntitled = String(chatSessionContext?.isUntitled);
 		const hasDelegatePrompt = String(request.command === 'delegate');
-
-		/* __GDPR__
-		"copilotcli.chat.invoke" : {
-			"owner": "joshspicer",
-			"comment": "Event sent when a CopilotCLI chat request is made.",
-			"chatRequestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The unique chat request ID." },
-			"hasChatSessionItem": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Invoked with a chat session item." },
-			"isUntitled": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Indicates if the chat session is untitled." },
-			"hasDelegatePrompt": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Indicates if the prompt is a /delegate command." }
-		}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('copilotcli.chat.invoke', {
 			chatRequestId: request.id,
 			hasChatSessionItem,

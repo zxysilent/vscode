@@ -36,14 +36,6 @@ export abstract class SafePromptElement<P extends BasePromptElementProps, S = vo
 		if (this._contextService.extensionMode !== ExtensionMode.Production && !isScenarioAutomation) {
 			throw err;
 		}
-
-		/* __GDPR__
-			"prompt.invalidreference": {
-				"owner": "jrieken",
-				"comment": "Tracks bad prompt references",
-				"stack": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Error stack" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryErrorEvent('prompt.invalidreference', { stack: err.stack });
 	}
 }

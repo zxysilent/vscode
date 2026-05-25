@@ -128,17 +128,6 @@ export class VirtualToolGrouper implements IToolCategorization {
 		if (toolsetEntries.length > 0) {
 			const totalToolsToGroup = toolsetEntries.reduce((sum, [, tools]) => sum + tools.length, 0);
 			const totalGroupsCreated = groupedResults.filter(item => item instanceof VirtualTool).length;
-
-			/* __GDPR__
-				"virtualTools.perToolsetGenerate" : {
-					"owner": "connor4312",
-					"comment": "Reports information about the per-toolset generation of virtual tools.",
-					"toolsetsProcessed": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of toolsets processed", "isMeasurement": true },
-					"toolsBefore": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of tools before categorization", "isMeasurement": true },
-					"groupsAfter": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of groups after categorization", "isMeasurement": true },
-					"builtinTools": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of builtin tools added directly", "isMeasurement": true }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('virtualTools.perToolsetGenerate', {}, {
 				toolsetsProcessed: toolsetEntries.length,
 				toolsBefore: totalToolsToGroup,
@@ -204,16 +193,6 @@ export class VirtualToolGrouper implements IToolCategorization {
 			error = e;
 		} finally {
 			// Telemetry for predicted tool re-expansion
-			/* __GDPR__
-				"virtualTools.expandEmbedding" : {
-					"owner": "connor4312",
-					"comment": "Expansion of virtual tool groups using embedding-based ranking.",
-					"error": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "Error message if expansion failed" },
-					"blockingMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Blocking duration of the expansion operation in milliseconds", "isMeasurement": true },
-					"computeMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Duration of the expansion operation in milliseconds", "isMeasurement": true },
-					"hadError": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether the operation had an error", "isMeasurement": true }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('virtualTools.expandEmbedding', { error: error ? error.message : undefined }, {
 				blockingMs: sw.elapsed(),
 				computeMs,

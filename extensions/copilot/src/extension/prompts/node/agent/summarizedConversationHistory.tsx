@@ -728,15 +728,6 @@ class ConversationHistorySummarizer {
 				messages = validationResult.messages;
 				if (validationResult.strippedToolCallCount > 0) {
 					this.logInfo(`Stripped ${validationResult.strippedToolCallCount} orphaned tool calls from summarization prompt`, mode);
-					/* __GDPR__
-						"summarization.strippedOrphanedToolCalls" : {
-							"owner": "vijayu",
-							"comment": "Tracks when orphaned tool calls are stripped from the summarization prompt for Gemini models",
-							"strippedToolCallCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of orphaned tool_calls stripped from the summarization prompt." },
-							"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model ID." },
-							"mode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The summarization mode (simple or full)." }
-						}
-					*/
 					this.telemetryService.sendMSFTTelemetryEvent('summarization.strippedOrphanedToolCalls', {
 						model: endpoint.model,
 						mode,
@@ -836,34 +827,6 @@ class ConversationHistorySummarizer {
 		const isDuringToolCalling = !!this.props.promptContext.toolCallRounds?.length ? 1 : 0;
 		const conversationId = this.props.promptContext.conversation?.sessionId;
 		const hasWorkingNotebook = this.props.workingNotebook ? 1 : 0;
-
-		/* __GDPR__
-			"summarizedConversationHistory" : {
-				"owner": "roblourens",
-				"comment": "Tracks when summarization happens and what the outcome was",
-				"summarizationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "An ID to join all attempts of this summarization task." },
-				"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The success state or failure reason of the summarization." },
-				"detailedOutcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "A more detailed error message." },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model ID used for the summarization." },
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request ID from the summarization call." },
-				"chatRequestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The chat request ID that this summarization ran during." },
-				"promptTypes": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Role and character count of each prompt message in order, as a proxy for cache hit rate (e.g. system:1234,user:567)." },
-				"numRounds": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of tool call rounds before this summarization was triggered." },
-				"numRoundsSinceLastSummarization": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of tool call rounds since the last summarization." },
-				"turnIndex": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The index of the current turn." },
-				"curTurnRoundIndex": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The index of the current round within the current turn" },
-				"lastUsedTool": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The name of the last tool used before summarization." },
-				"isDuringToolCalling": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether this summarization was triggered during a tool calling loop." },
-				"conversationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Id for the current chat conversation." },
-				"hasWorkingNotebook": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the conversation summary includes a working notebook." },
-				"mode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The mode of the conversation summary." },
-				"summarizationMode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The mode of the conversation summary." },
-				"duration": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The duration of the summarization attempt in ms." },
-				"promptTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of prompt tokens, server side counted", "isMeasurement": true },
-				"promptCacheTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of prompt tokens hitting cache as reported by server", "isMeasurement": true },
-				"responseTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of generated tokens", "isMeasurement": true }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('summarizedConversationHistory', {
 			summarizationId: this.summarizationId,
 			outcome,

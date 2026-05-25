@@ -325,16 +325,6 @@ export abstract class BaseCopilotTokenManager extends Disposable implements ICop
 			// We were able to validate strictly as expected - no telemetry needed
 			return;
 		}
-
-		/* __GDPR__
-			"copilotTokenFetching.validation" : {
-				"owner": "TylerLeonhardt",
-				"comment": "Track token envelope validation strategy to detect server schema drift.",
-				"strategy": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The validation strategy used: 'fallback' or 'failed'" },
-				"strictError": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The error from strict validation, if any" },
-				"fallbackError": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The error from fallback validation, if failed" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('copilotTokenFetching.validation', {
 			strategy: validationResult.strategy,
 			strictError: validationResult.strictError,

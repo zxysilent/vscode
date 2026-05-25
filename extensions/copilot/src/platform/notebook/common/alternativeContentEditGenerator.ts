@@ -117,22 +117,6 @@ export class AlternativeNotebookContentEditGenerator implements IAlternativeNote
 
 		(async () => {
 			const model = await Promise.resolve(telemetryOptions?.model).catch(() => undefined);
-			/* __GDPR__
-				"notebook.editGeneration" : {
-					"owner": "donjayamanne",
-					"comment": "Metadata about the code mapper request",
-					"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-					"requestSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source from where the request was made" },
-					"model": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Model selection for the response" },
-					"inputFormat": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Input format for the notebook source (xml, json, text)" },
-					"isEmptyNotebook": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether the notebook is empty", "isMeasurement": true },
-					"isNotebookOrUri": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether we're given a notebook or just a uri (1 = Notebook, 0 = Uri)", "isMeasurement": true },
-					"isJupyterNotebookUri": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether we're given a Jupyter notebook or just a uri (1 = Jupyter Notebook, 0 = Other)", "isMeasurement": true },
-					"isEditEmitted": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether a Notebook edit was emitted (insert or delete cell) (1 = Yes, 0 = No)", "isMeasurement": true },
-					"isCellTextEditEmitted": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether an edit was emitted for a cell (1 = Yes, 0 = No)", "isMeasurement": true },
-					"sourceLength": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of lines in the source code from which we're to generate edits", "isMeasurement": true }
-				}
-			*/
 			this.telemetryService.sendMSFTTelemetryEvent('notebook.editGeneration', {
 				requestId: telemetryOptions?.requestId,
 				requestSource: telemetryOptions?.source,

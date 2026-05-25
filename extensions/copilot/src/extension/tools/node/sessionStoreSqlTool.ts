@@ -464,16 +464,6 @@ class SessionStoreSqlTool implements ICopilotTool<SessionStoreSqlParams> {
 
 	private _sendTelemetry(source: string, rowCount: number, durationMs: number, success: boolean, error?: string): void {
 		if (success) {
-			/* __GDPR__
-"chronicle.sqlQuery" : {
-"owner": "vijayu",
-"comment": "Tracks session store SQL query execution and failures",
-"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Query target: local, cloud, or blocked." },
-"error": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "Truncated error message." },
-"rowCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of rows returned." },
-"durationMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Query duration in milliseconds." }
-}
-*/
 			this._telemetryService.sendMSFTTelemetryEvent('chronicle.sqlQuery', {
 				source,
 			}, {

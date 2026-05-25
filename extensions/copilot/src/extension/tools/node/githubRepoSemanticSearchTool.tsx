@@ -103,15 +103,6 @@ export class GithubRepoSemanticSearchTool implements ICopilotTool<GithubRepoTool
 				invocationMessage: l10n.t("Searching '{0}' for relevant code snippets", options.input.repo),
 			};
 		}
-
-		/* __GDPR__
-			"githubRepoTool.prepare.error" : {
-				"owner": "mjbvz",
-				"comment": "Tracks errors for the GitHub repo tool prepare step",
-				"errorId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "General reason why the search failed" },
-				"errorDetails": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "More detailed info about the failure" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('githubRepoTool.prepare.error', {
 			errorId: prepareResult.err.id,
 			errorDetails: prepareResult.err.details,

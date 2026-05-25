@@ -213,14 +213,6 @@ Learn more about [GitHub Copilot](https://docs.github.com/copilot/using-github-c
 				const switchToAutoConfirmation = getSwitchToAutoOnRateLimitConfirmation(request);
 				if (switchToAutoConfirmation) {
 					const action = switchToAutoConfirmation.alwaysSwitchToAuto ? 'switchToAutoAlways' : 'switchToAuto';
-					/* __GDPR__
-						"chatRateLimitAction" : {
-							"owner": "lramos15",
-							"comment": "Tracks which action users take when rate limited",
-							"action": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The action taken: switchToAuto, switchToAutoAlways, tryAgain, or autoSwitch." },
-							"modelId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model ID the user was rate limited on." }
-						}
-					*/
 					this.telemetryService.sendMSFTTelemetryEvent('chatRateLimitAction', { action, modelId: request.model?.id });
 					request = await this.switchToAutoModel(request, stream, switchToAutoConfirmation.alwaysSwitchToAuto);
 				} else if (isContinueOnError(request)) {

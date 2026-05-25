@@ -646,14 +646,6 @@ export class InlineCompletionProviderImpl extends Disposable implements InlineCo
 				const supersededBy = reason.supersededBy ? (reason.supersededBy as NesCompletionItem) : undefined;
 				logger.trace(`Superseded by: ${supersededBy?.info.requestUuid || 'none'}, was shown: ${item.wasShown}`);
 				if (supersededBy) {
-					/* __GDPR__
-						"supersededInlineEdit" : {
-							"owner": "ulugbekna",
-							"comment": "Tracks when an inline edit was superseded by another edit.",
-							"opportunityId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The opportunity ID of the original inline edit." },
-							"supersededByOpportunityId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The opportunity ID of the inline edit that superseded the original edit." }
-						}
-					*/
 					this._telemetryService.sendMSFTTelemetryEvent('supersededInlineEdit', { opportunityId: item.info.requestUuid, supersededByOpportunityId: supersededBy.info.requestUuid });
 				}
 				this._handleDidIgnoreCompletionItem(item, supersededBy);
@@ -708,19 +700,6 @@ export class InlineCompletionProviderImpl extends Disposable implements InlineCo
 			userEdits,
 			{ includeArc: true },
 			res => {
-				/* __GDPR__
-					"reportInlineEditSurvivalRate" : {
-						"owner": "hediet",
-						"comment": "Reports the survival rate for an inline edit.",
-						"opportunityId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Unique identifier for an opportunity to show an NES." },
-
-						"survivalRateFourGram": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The rate between 0 and 1 of how much of the AI edit is still present in the document." },
-						"survivalRateNoRevert": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The rate between 0 and 1 of how much of the ranges the AI touched ended up being reverted." },
-						"didBranchChange": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Indicates if the branch changed in the meantime. If the branch changed (value is 1), this event should probably be ignored." },
-						"timeDelayMs": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The time delay between the user accepting the edit and measuring the survival rate." },
-						"arc": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The accepted and restrained character count." }
-					}
-				*/
 				this._telemetryService.sendTelemetryEvent('reportInlineEditSurvivalRate', { microsoft: true, github: { eventNamePrefix: 'copilot-nes/' } },
 					{
 						opportunityId: item.requestUuid,

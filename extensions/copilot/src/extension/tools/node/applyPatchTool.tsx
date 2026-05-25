@@ -428,19 +428,6 @@ export class ApplyPatchTool implements ICopilotTool<IApplyPatchToolParams> {
 				// TODO@roblourens see if this improves the survival metric, find a better fix.
 				for (const tracker of editSurvivalTrackers.values()) {
 					tracker.startReporter(res => {
-						/* __GDPR__
-							"applyPatch.trackEditSurvival" : {
-								"owner": "joyceerhl",
-								"comment": "Tracks how much percent of the AI edits survived after 5 minutes of accepting",
-								"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-								"requestSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source from where the request was made" },
-								"mapper": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The code mapper used strategy" },
-								"survivalRateFourGram": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The rate between 0 and 1 of how much of the AI edit is still present in the document." },
-								"survivalRateNoRevert": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The rate between 0 and 1 of how much of the ranges the AI touched ended up being reverted." },
-								"didBranchChange": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Indicates if the branch changed in the meantime. If the branch changed (value is 1), this event should probably be ignored." },
-								"timeDelayMs": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The time delay between the user accepting the edit and measuring the survival rate." }
-							}
-						*/
 						res.telemetryService.sendMSFTTelemetryEvent('applyPatch.trackEditSurvival', { requestId: this._promptContext?.requestId, requestSource: 'agent', mapper: 'applyPatchTool' }, {
 							survivalRateFourGram: res.fourGram,
 							survivalRateNoRevert: res.noRevert,
@@ -595,13 +582,6 @@ export class ApplyPatchTool implements ICopilotTool<IApplyPatchToolParams> {
 					throw error;
 				}
 			} finally {
-				/* __GDPR__
-					"applyPatchHealRate" : {
-						"owner": "connor4312",
-						"comment": "Records how correct the healing of a patch was",
-						"success": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the input was healed" }
-					}
-				*/
 				this.telemetryService.sendMSFTTelemetryEvent('applyPatchHealRate', {}, {
 					success: success ? 1 : 0,
 				});
@@ -628,20 +608,6 @@ export class ApplyPatchTool implements ICopilotTool<IApplyPatchToolParams> {
 
 	private async sendApplyPatchTelemetry(outcome: string, options: vscode.LanguageModelToolInvocationOptions<IApplyPatchToolParams>, file: string | undefined, healed: boolean, isNotebook: boolean | undefined, unexpectedError?: Error) {
 		const model = options.model && (await this.endpointProvider.getChatEndpoint(options.model)).model;
-
-		/* __GDPR__
-			"applyPatchToolInvoked" : {
-				"owner": "roblourens",
-				"comment": "The apply_patch tool was invoked",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"interactionId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current interaction." },
-				"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the invocation was successful, or a failure reason" },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that invoked the tool" },
-				"healed": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the input was healed" },
-				"isNotebook": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the input was a notebook, 1 = yes, 0 = no, other = Unknown" },
-				"error": { "classification": "CallstackOrException", "purpose": "FeatureInsight", "comment": "Unexpected error that occurrs during application" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('applyPatchToolInvoked',
 			{
 				requestId: options.chatRequestId,

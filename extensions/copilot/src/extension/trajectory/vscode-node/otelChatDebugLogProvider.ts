@@ -331,16 +331,6 @@ export class OTelChatDebugLogProviderContribution extends Disposable implements 
 			const bTime = 'created' in b ? (b as { created: Date }).created.getTime() : 0;
 			return aTime - bTime;
 		});
-
-		/* __GDPR__
-			"otelDebug.convertEntriesToEvents" : {
-				"owner": "vijayupadya",
-				"comment": "Timing telemetry for converting JSONL entries to chat debug events",
-				"durationMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Time in ms to read and convert entries" },
-				"entryCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Number of JSONL entries read" },
-				"eventCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Number of output events" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('otelDebug.convertEntriesToEvents', undefined, {
 			durationMs: Date.now() - startTime,
 			entryCount: entries.length,

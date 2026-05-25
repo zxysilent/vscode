@@ -367,15 +367,6 @@ export class ChunkingEndpointClientImpl extends Disposable implements IChunkingE
 			const response = await raceCancellationError(this._requestLimiter.enqueue(makeRequest, token), token);
 			if (!response.ok) {
 				this._logService.debug(`Error chunking '${content.uri}'. Status: ${response.status}. Status Text: ${response.statusText}.`);
-
-				/* __GDPR__
-					"workspaceChunkEmbeddingsIndex.computeChunksAndEmbeddings.error" : {
-						"owner": "mjbvz",
-						"comment": "Tracks errors from the chunks service",
-						"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Caller of computeChunksAndEmbeddings" },
-						"responseStatus": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Status code" }
-					}
-				*/
 				this._telemetryService.sendMSFTTelemetryEvent('workspaceChunkEmbeddingsIndex.computeChunksAndEmbeddings.error', {
 					source: telemetryInfo.toString(),
 				}, {

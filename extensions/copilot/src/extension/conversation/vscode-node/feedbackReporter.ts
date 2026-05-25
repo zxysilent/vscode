@@ -151,19 +151,6 @@ export class FeedbackReporter extends Disposable implements IFeedbackReporter {
 	}
 
 	async reportSearch(kind: SearchFeedbackKind): Promise<void> {
-		/* __GDPR__
-			"copilot.search.feedback" : {
-				"owner": "osortega",
-				"comment": "Feedback telemetry for copilot search",
-				"kind": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Feedback provided by the user." },
-				"chunkCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Count of copilot search code chunks." },
-				"rankResult": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Result of the copilot search ranking." },
-				"rankResultsCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Count of the results from copilot search ranking." },
-				"combinedResultsCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Count of combined results from copilot search." },
-				"chunkSearchDuration": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Duration of the chunk search" },
-				"llmFilteringDuration": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Duration of the LLM filtering" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('copilot.search.feedback', {
 			kind,
 			rankResult: SemanticSearchTextSearchProvider.feedBackTelemetry.rankResult,

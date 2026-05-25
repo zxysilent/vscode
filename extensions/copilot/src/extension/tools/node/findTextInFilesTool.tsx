@@ -150,18 +150,6 @@ Then if you want to include those files you can call the tool again by setting "
 		const model = options.model && (await this.endpointProvider.getChatEndpoint(options.model)).model;
 		const isMultiRoot = this.workspaceService.getWorkspaceFolders().length > 1;
 		const includePattern = options.input.includePattern;
-		/* __GDPR__
-			"findTextInFilesToolInvoked" : {
-				"owner": "roblourens",
-				"comment": "Telemetry for the findTextInFiles tool in multi-root workspaces",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that invoked the tool" },
-				"isMultiRoot": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the workspace has multiple root folders" },
-				"patternScopedToFolder": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the includePattern was resolved to a specific workspace folder" },
-				"patternStartsWithFolderPath": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the raw includePattern starts with a workspace folder absolute path" },
-				"patternContainsFolderPath": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the raw includePattern contains a workspace folder absolute path anywhere" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('findTextInFilesToolInvoked', {
 			requestId: options.chatRequestId,
 			model,

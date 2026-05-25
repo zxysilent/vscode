@@ -103,19 +103,6 @@ export class MultiReplaceStringTool extends AbstractReplaceStringTool<IMultiRepl
 				failures++;
 			}
 		}
-
-		/* __GDPR__
-			"multiStringReplaceCall" : {
-				"owner": "connor4312",
-				"comment": "Tracks how much percent of the AI edits survived after 5 minutes of accepting",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model used for the request." },
-				"successes": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The number of successful edits.", "isMeasurement": true },
-				"failures": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The number of failed edits.", "isMeasurement": true },
-				"uniqueUris": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The number of unique URIs edited.", "isMeasurement": true },
-				"individualEdits": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The number of individual text edits made.", "isMeasurement": true }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('multiStringReplaceCall', {
 			requestId: this._promptContext?.requestId,
 			model: await this.modelForTelemetry(options),

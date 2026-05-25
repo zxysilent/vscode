@@ -150,15 +150,6 @@ export class VSCodeCopilotTokenManager extends BaseCopilotTokenManager {
 		if (tokenResult.kind === 'success') {
 			return;
 		}
-
-		/* __GDPR__
-			"copilotTokenFetching.error" : {
-				"owner": "TylerLeonhardt",
-				"comment": "Report on the frequency of token retrieval failures.",
-				"reason": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The reason for the token retrieval failure" },
-				"notification_id": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The notification ID associated with the failure, if any" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('copilotTokenFetching.error', {
 			reason: tokenResult.reason,
 			notification_id: tokenResult.notification_id,

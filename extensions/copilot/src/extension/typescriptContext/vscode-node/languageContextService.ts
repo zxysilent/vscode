@@ -90,17 +90,6 @@ class TelemetrySender {
 		this.sendSpeculativeRequestTelemetryCounter++;
 
 		if (shouldSendTelemetry) {
-			/* __GDPR__
-				"typescript-context-plugin.completion-context.speculative" : {
-					"owner": "dirkb",
-					"comment": "Telemetry for copilot inline completion context",
-					"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request correlation id" },
-					"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source of the request" },
-					"originalRequestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The original request id for which this is a speculative request" },
-					"numberOfItems": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of items in the speculative request", "isMeasurement": true },
-					"sampleTelemetry": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The sampling rate for telemetry. A value of 1 means every request is logged, a value of 5 means every 5th request is logged, etc.", "isMeasurement": true }
-				}
-			*/
 			this.telemetryService.sendMSFTTelemetryEvent(
 				'typescript-context-plugin.completion-context.speculative',
 				{
@@ -133,38 +122,6 @@ class TelemetrySender {
 		const shouldSendTelemetry = sampleTelemetry === 1 || this.sendRequestTelemetryCounter % sampleTelemetry === 0;
 		this.sendRequestTelemetryCounter++;
 		if (shouldSendTelemetry) {
-			/* __GDPR__
-				"typescript-context-plugin.completion-context.request" : {
-					"owner": "dirkb",
-					"comment": "Telemetry for copilot inline completion context",
-					"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request correlation id" },
-					"opportunityId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The opportunity id" },
-					"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source of the request" },
-					"trigger": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The trigger kind of the request" },
-					"cacheRequest": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The cache request that was used to populate the cache" },
-					"nodePath": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The syntax kind path to the AST node the position resolved to." },
-					"cancelled": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the request got cancelled on the client side" },
-					"timedOut": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the request timed out on the server side" },
-					"tokenBudgetExhausted": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the token budget was exhausted" },
-					"serverTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Time taken on the server side", "isMeasurement": true },
-					"contextComputeTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Time taken on the server side to compute the context", "isMeasurement": true },
-					"timeTaken": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Time taken to provide the completion", "isMeasurement": true },
-					"total": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Total number of context items", "isMeasurement": true },
-					"snippets": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of code snippets", "isMeasurement": true },
-					"traits": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of traits", "isMeasurement": true },
-					"yielded": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of yielded items", "isMeasurement": true },
-					"items": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Detailed information about each context item delivered." },
-					"totalSize": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Total size of all context items", "isMeasurement": true },
-					"fileSize": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The size of the file", "isMeasurement": true },
-					"cachedItems": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of cache items", "isMeasurement": true },
-					"referencedItems": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of referenced items", "isMeasurement": true },
-					"isSpeculative": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the request was speculative" },
-					"beforeCacheState": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The cache state before the request was sent" },
-					"afterCacheState": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The cache state after the request was sent" },
-					"fromCache": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the context was fully provided from cache" },
-					"sampleTelemetry": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The sampling rate for telemetry. A value of 1 means every request is logged, a value of 5 means every 5th request is logged, etc.", "isMeasurement": true }
-				}
-			*/
 			this.telemetryService.sendMSFTTelemetryEvent(
 				'typescript-context-plugin.completion-context.request',
 				{
@@ -203,16 +160,6 @@ class TelemetrySender {
 		if (data.errorData !== undefined && data.errorData.length > 0) {
 			const errorData = data.errorData;
 			for (const error of errorData) {
-				/* __GDPR__
-					"typescript-context-plugin.completion-context.error" : {
-						"owner": "dirkb",
-						"comment": "Telemetry for copilot inline completion context errors",
-						"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request correlation id" },
-						"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source of the request" },
-						"code": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The failure code", "isMeasurement": true },
-						"message": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "The failure message" }
-					}
-				*/
 				this.telemetryService.sendMSFTTelemetryEvent(
 					'typescript-context-plugin.completion-context.error',
 					{
@@ -233,22 +180,6 @@ class TelemetrySender {
 		const stats = data.stats;
 		const items = stats.items;
 		const totalSize = stats.totalSize;
-		/* __GDPR__
-			"typescript-context-plugin.completion-context.on-timeout" : {
-				"owner": "dirkb",
-				"comment": "Telemetry for copilot inline completion context on timeout",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request correlation id" },
-				"opportunityId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The opportunity id" },
-				"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source of the request" },
-				"total": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Total number of context items", "isMeasurement": true },
-				"snippets": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of code snippets", "isMeasurement": true },
-				"traits": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of traits", "isMeasurement": true },
-				"yielded": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of yielded items", "isMeasurement": true },
-				"items": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Detailed information about each context item delivered." },
-				"totalSize": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Total size of all context items", "isMeasurement": true },
-				"cacheState": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The cache state for the onTimeout request" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent(
 			'typescript-context-plugin.completion-context.on-timeout',
 			{
@@ -270,18 +201,6 @@ class TelemetrySender {
 	}
 
 	public sendRequestFailureTelemetry(context: RequestContext, data: { error: protocol.ErrorCode; message: string; stack?: string }): void {
-		/* __GDPR__
-			"typescript-context-plugin.completion-context.failed" : {
-				"owner": "dirkb",
-				"comment": "Telemetry for copilot inline completion context in failure case",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request correlation id" },
-				"opportunityId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The opportunity id" },
-				"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source of the request" },
-				"code:": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The failure code" },
-				"message": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "The failure message" },
-				"stack": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "The failure stack" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent(
 			'typescript-context-plugin.completion-context.failed',
 			{
@@ -296,16 +215,6 @@ class TelemetrySender {
 	}
 
 	public sendRequestCancelledTelemetry(context: RequestContext, timeTaken: number): void {
-		/* __GDPR__
-			"typescript-context-plugin.completion-context.cancelled" : {
-				"owner": "dirkb",
-				"comment": "Telemetry for copilot inline completion context in cancellation case",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request correlation id" },
-				"opportunityId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The opportunity id" },
-				"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source of the request" },
-				"timeTaken": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Time taken to provide the completion", "isMeasurement": true }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent(
 			'typescript-context-plugin.completion-context.cancelled',
 			{
@@ -324,15 +233,6 @@ class TelemetrySender {
 		if (response !== undefined) {
 			const body: protocol.PingResponse['body'] | undefined = response?.body;
 			if (body?.kind === 'ok') {
-				/* __GDPR__
-					"typescript-context-plugin.activation.ok" : {
-						"owner": "dirkb",
-						"comment": "Telemetry for TypeScript server plugin",
-						"session": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the TypeScript server had a session" },
-						"supported": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the TypeScript server version is supported" },
-						"version": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The version of the TypeScript server" }
-					}
-				*/
 				this.telemetryService.sendMSFTTelemetryEvent(
 					'typescript-context-plugin.activation.ok',
 					{
@@ -361,17 +261,6 @@ class TelemetrySender {
 	}
 
 	public sendActivationFailedTelemetry(location: ErrorLocation, part: ErrorPart, message: string, stack?: string | undefined, version?: string | undefined): void {
-		/* __GDPR__
-			"typescript-context-plugin.activation.failed" : {
-				"owner": "dirkb",
-				"comment": "Telemetry for TypeScript server plugin",
-				"location": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The location of the failure" },
-				"part": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The part that errored" },
-				"message": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "The failure message" },
-				"stack": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "The failure stack" },
-				"version": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The version" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent(
 			'typescript-context-plugin.activation.failed',
 			{
@@ -385,15 +274,6 @@ class TelemetrySender {
 	}
 
 	private sendUnknownPingResponseTelemetry(location: ErrorLocation, part: ErrorPart, response: object): void {
-		/* __GDPR__
-			"typescript-context-plugin.activation.unknown-ping-response" : {
-				"owner": "dirkb",
-				"comment": "Telemetry for TypeScript server plugin",
-				"location": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The location of the failure" },
-				"part": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The part that errored" },
-				"response": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "The response literal" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent(
 			'typescript-context-plugin.activation.unknown-ping-response',
 			{
@@ -405,15 +285,6 @@ class TelemetrySender {
 	}
 
 	public sendIntegrationTelemetry(requestId: string, document: string, versionMismatch?: string): void {
-		/* __GDPR__
-			"typescript-context-plugin.integration.failed" : {
-				"owner": "dirkb",
-				"comment": "Telemetry for Copilot inline chat integration.",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request correlation id" },
-				"document": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The document for which the integration failed" },
-				"versionMismatch": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The version mismatch" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent(
 			'typescript-context-plugin.integration.failed',
 			{
@@ -426,13 +297,6 @@ class TelemetrySender {
 
 	public sendInlineCompletionProviderTelemetry(source: KnownSources, registered: boolean): void {
 		if (registered) {
-			/* __GDPR__
-				"typescript-context-plugin.inline-completion-provider.registered" : {
-					"owner": "dirkb",
-					"comment": "Telemetry for Copilot inline completions",
-					"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source of the request" }
-				}
-			*/
 			this.telemetryService.sendMSFTTelemetryEvent(
 				'typescript-context-plugin.inline-completion-provider.registered',
 				{
@@ -440,13 +304,6 @@ class TelemetrySender {
 				}
 			);
 		} else {
-			/* __GDPR__
-				"typescript-context-plugin.inline-completion-provider.unregistered" : {
-					"owner": "dirkb",
-					"comment": "Telemetry for Copilot inline completions",
-					"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source of the request" }
-				}
-			*/
 			this.telemetryService.sendMSFTTelemetryEvent(
 				'typescript-context-plugin.inline-completion-provider.unregistered',
 				{

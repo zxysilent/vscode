@@ -637,14 +637,6 @@ export class AgentIntentInvocation extends EditCodeIntentInvocation implements I
 			const previousForegroundSummary = turn?.getMetadata(SummarizedConversationHistoryMetadata);
 			if (previousForegroundSummary?.source === 'foreground' && previousForegroundSummary.outcome && previousForegroundSummary.outcome !== 'success') {
 				this.logService.debug(`[ConversationHistorySummarizer] ${reason}, skipping repeated foreground summarization after prior failure (${previousForegroundSummary.outcome})`);
-				/* __GDPR__
-					"triggerSummarizeSkipped" : {
-						"owner": "bhavyau",
-						"comment": "Tracks when foreground summarization was skipped because a previous attempt already failed in this turn.",
-						"previousOutcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The outcome of the previous failed summarization attempt." },
-						"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model ID." }
-					}
-				*/
 				this.telemetryService.sendMSFTTelemetryEvent('triggerSummarizeSkipped', { previousOutcome: previousForegroundSummary.outcome, model: renderProps.endpoint.model });
 				GenAiMetrics.incrementAgentSummarizationCount(this.otelService, 'skipped');
 				return renderWithoutSummarization(`skipping repeated foreground summarization after prior failure (${previousForegroundSummary.outcome})`, renderProps);
@@ -663,14 +655,6 @@ export class AgentIntentInvocation extends EditCodeIntentInvocation implements I
 			} catch (e) {
 				this.logService.error(e, `[ConversationHistorySummarizer] summarization failed`);
 				const errorKind = e instanceof BudgetExceededError ? 'budgetExceeded' : 'error';
-				/* __GDPR__
-					"triggerSummarizeFailed" : {
-						"owner": "roblourens",
-						"comment": "Tracks when triggering summarization failed - for example, a summary was created but not applied successfully.",
-						"errorKind": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The success state or failure reason of the summarization." },
-						"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model ID used for the summarization." }
-					}
-				*/
 				this.telemetryService.sendMSFTTelemetryEvent('triggerSummarizeFailed', { errorKind, model: renderProps.endpoint.model });
 				GenAiMetrics.incrementAgentSummarizationCount(this.otelService, 'failed');
 
@@ -1012,28 +996,6 @@ export class AgentIntentInvocation extends EditCodeIntentInvocation implements I
 				const lastUsedTool = rounds.at(-1)?.toolCalls?.at(-1)?.name
 					?? history.at(-1)?.rounds.at(-1)?.toolCalls?.at(-1)?.name ?? 'none';
 				const promptTypes = messages.map(msg => `${msg.role}${'name' in msg && msg.name ? `-${msg.name}` : ''}:${getTextPart(msg.content).length}`).join(',');
-				/* __GDPR__
-					"summarizedConversationHistory" : {
-						"owner": "bhavyau",
-						"comment": "Tracks background summarization outcome",
-						"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The success state." },
-						"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model ID." },
-						"summarizationMode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The summarization mode." },
-						"conversationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Session id." },
-						"chatRequestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The chat request ID." },
-						"lastUsedTool": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The last tool used before summarization." },
-						"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request ID from the summarization call." },
-						"promptTypes": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Role and character count of each prompt message in order, as a proxy for cache hit rate (e.g. system:1234,user:567)." },
-						"numRounds": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total tool call rounds." },
-						"turnIndex": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The index of the current turn." },
-						"curTurnRoundIndex": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The index of the current round within the current turn." },
-						"isDuringToolCalling": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether this was triggered during tool calling." },
-						"duration": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Duration in ms." },
-						"promptTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Prompt tokens." },
-						"promptCacheTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Cached prompt tokens." },
-						"responseTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Output tokens." }
-					}
-				*/
 				this.telemetryService.sendMSFTTelemetryEvent('summarizedConversationHistory', {
 					outcome: 'success',
 					model: this.endpoint.model,
@@ -1068,20 +1030,6 @@ export class AgentIntentInvocation extends EditCodeIntentInvocation implements I
 				};
 			} catch (err) {
 				this.logService.error(err, `[ConversationHistorySummarizer] background compaction failed`);
-
-				/* __GDPR__
-					"summarizedConversationHistory" : {
-						"owner": "bhavyau",
-						"comment": "Tracks background summarization failure",
-						"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The success state." },
-						"detailedOutcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Detailed failure reason." },
-						"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model ID." },
-						"summarizationMode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The summarization mode." },
-						"conversationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Session id." },
-						"chatRequestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The chat request ID." },
-						"duration": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Duration in ms." }
-					}
-				*/
 				this.telemetryService.sendMSFTTelemetryEvent('summarizedConversationHistory', {
 					outcome: 'failed',
 					detailedOutcome: err instanceof Error ? err.message : String(err),
@@ -1199,18 +1147,6 @@ export class AgentIntentInvocation extends EditCodeIntentInvocation implements I
 		contextRatio: number,
 		promptContext: IBuildPromptContext,
 	): void {
-		/* __GDPR__
-			"backgroundSummarizationApplied" : {
-				"owner": "bhavyau",
-				"comment": "Tracks background compaction orchestration decisions and outcomes in the agent loop.",
-				"trigger": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The code path that triggered background compaction consumption." },
-				"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Outcome of the background compaction consumption. One of: 'applied' (result applied and re-render succeeded), 'appliedButReRenderFailed' (result applied but the subsequent re-render still exceeded budget and required a fallback), 'noResult' (no usable result was produced)." },
-				"conversationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Id for the current chat conversation." },
-				"chatRequestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The chat request ID that this background compaction was consumed during." },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model ID used." },
-				"contextRatio": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The context window usage ratio when background compaction was consumed." }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('backgroundSummarizationApplied', {
 			trigger,
 			outcome,

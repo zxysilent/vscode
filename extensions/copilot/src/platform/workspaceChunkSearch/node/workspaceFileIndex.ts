@@ -717,14 +717,6 @@ export class WorkspaceFileIndex extends Disposable implements IWorkspaceFileInde
 			for (const resource of await this.getWorkspaceFilesToIndex(this.getMaxFilesToIndex(), this._disposeCts.token)) {
 				this.createOrUpdateFsEntry(resource);
 			}
-
-			/* __GDPR__
-				"workspaceChunkIndex.initialize" : {
-					"owner": "mjbvz",
-					"comment": "Information about successful code searches",
-					"totalFileCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of files we can index" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('workspaceChunkIndex.initialize', {}, {
 				totalFileCount: this.fileCount
 			});

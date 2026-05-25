@@ -103,18 +103,6 @@ export class RemoteEmbeddingsComputer implements IEmbeddingsComputer {
 						cancelToken: cancellationToken,
 					});
 					if (!response.ok) {
-						/* __GDPR__
-							"remoteEmbeddingsComputer.computeEmbeddings.error" : {
-								"owner": "mjbvz",
-								"comment": "Total time for searchFileChunks to complete",
-								"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller" },
-								"correlationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id" },
-								"embeddingType": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Embedding type" },
-								"totalInputLength": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total length of the input" },
-								"batchInputLength": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total length of the batch" },
-								"statusCode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Status code of the response" }
-							}
-						*/
 						this._telemetryService.sendMSFTTelemetryEvent('remoteEmbeddingsComputer.computeEmbeddings.error', {
 							source: telemetryInfo?.callTracker.toString(),
 							correlationId: telemetryInfo?.correlationId,

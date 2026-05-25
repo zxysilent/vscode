@@ -304,15 +304,6 @@ export class UserInteractionMonitor {
 		catch (e) {
 			this._logService.error(e, 'Failed to parse user happiness score configuration, using default config');
 			// Log to telemetry when we fail to parse an experimental config, but still offer the default config to avoid disruption.
-			/* __GDPR__
-				"incorrectNesAdaptiveAggressivenessConfig" : {
-					"owner": "bstee615",
-					"comment": "Capture if model configuration string is invalid JSON.",
-					"configName": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Name of the configuration that failed to parse." },
-					"errorMessage": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Error message from JSON.parse." },
-					"configValue": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The invalid JSON string." }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('incorrectNesAdaptiveAggressivenessConfig', { configName: configKey.id, errorMessage: ErrorUtils.toString(ErrorUtils.fromUnknown(e)), configValue: configString });
 			return DEFAULT_USER_HAPPINESS_SCORE_CONFIGURATION;
 		}

@@ -296,29 +296,6 @@ export class PromptCategorizerService implements IPromptCategorizerService {
 			: errorDetail;
 
 		// Send telemetry
-		/* __GDPR__
-			"promptCategorization" : {
-				"owner": "digitarald",
-				"comment": "Classifies agent requests for understanding user intent and response quality",
-				"taxonomyVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The taxonomy version used for classification (e.g. v2). Used to segment data when taxonomy keys change." },
-				"sessionId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The chat session identifier" },
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The extension-generated request identifier, matches panel.request requestId" },
-				"vscodeRequestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The VS Code chat request id, for joining with VS Code telemetry events" },
-				"modeName": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The chat mode name being used" },
-				"currentLanguage": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The language ID of the active editor" },
-				"outcome": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Classification outcome: empty string for success, partialClassification for recovered core fields, or error kind (timeout, requestFailed, noToolCall, parseError, invalidClassification, error)" },
-				"intent": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The classified intent (populated on success or partialClassification, empty string on failure)" },
-				"domain": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The classified domain (populated on success or partialClassification, empty string on failure)" },
-				"timeEstimateBestCase": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "ISO 8601 duration for best case time estimate" },
-				"timeEstimateRealistic": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "ISO 8601 duration for realistic time estimate" },
-				"scope": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The classified scope (populated on success or partialClassification, empty string on failure)" },
-				"promptLength": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Length of the user prompt in characters" },
-				"numReferences": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of context references attached to the request" },
-				"numToolReferences": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of tool references in the request" },
-				"confidence": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Confidence score of the classification (0.0 to 1.0)" },
-				"latencyMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Time in milliseconds to complete the classification" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent(
 			'promptCategorization',
 			{

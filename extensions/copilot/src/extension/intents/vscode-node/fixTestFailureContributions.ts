@@ -52,14 +52,6 @@ function registerTestMessageSparkles(store: DisposableStore, telemetryService: I
 		if (!args.test.uri) {
 			return; // should not happen based on context keys
 		}
-
-		/* __GDPR__
-		"intent.fixTestFailure.actioned" : {
-			"owner": "connor4312",
-			"comment": "Reports when we show a ",
-			"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Where the action was taken" }
-		}
-		*/
 		telemetryService.sendMSFTTelemetryEvent('intent.fixTestFailure.actioned', {
 			source: args.source ?? 'testResultsPanel',
 		});

@@ -311,25 +311,6 @@ export class SemanticSearchTextSearchProvider extends Disposable implements vsco
 	}
 
 	reportTelemetry() {
-		/* __GDPR__
-		"copilot.search.request" : {
-			"owner": "osortega",
-			"comment": "Copilot search request.",
-			"chunkCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Count of copilot search code chunks." },
-			"rankResult": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Result of the copilot search ranking." },
-			"rankResultsCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Count of the results from copilot search ranking." },
-			"combinedResultsCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Count of combined results from copilot search." },
-			"chunkSearchDuration": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Duration of the chunk search" },
-			"llmFilteringDuration": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Duration of the LLM filtering" },
-			"llmBestRank": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Best rank (lowest index) among LLM-selected chunks in the original retrieval ranking." },
-			"llmWorstRank": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Worst rank (highest index) among LLM-selected chunks in the original retrieval ranking." },
-			"llmSelectedCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of chunks selected by LLM from the initial retrieval." },
-			"rawLlmRankingResultsCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of raw results returned by the LLM." },
-			"parseResult": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Indicates the result of parsing the LLM response." },
-			"llmBestInRerank": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Best rank (lowest index) among LLM-selected chunks in the reranked results." },
-			"llmWorstInRerank": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Worst rank (highest index) among LLM-selected chunks in the reranked results." }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('copilot.search.request', {
 			rankResult: SemanticSearchTextSearchProvider.feedBackTelemetry.rankResult,
 			parseResult: SemanticSearchTextSearchProvider.feedBackTelemetry.parseResult,
@@ -351,48 +332,6 @@ export class SemanticSearchTextSearchProvider extends Disposable implements vsco
 			&& SemanticSearchTextSearchProvider.feedBackTelemetry.llmWorstRank !== undefined
 			&& SemanticSearchTextSearchProvider.feedBackTelemetry.llmSelectedCount !== undefined
 		) {
-			/* __GDPR__
-			"semanticSearch.ranking" : {
-				"owner": "rebornix",
-				"comment": "Semantic search request ranking.",
-				"llmBestRank": {
-					"classification": "SystemMetaData",
-					"purpose": "FeatureInsight",
-					"isMeasurement": true,
-					"comment": "Best rank (lowest index) among LLM-selected chunks in the original retrieval ranking."
-				},
-				"llmWorstRank": {
-					"classification": "SystemMetaData",
-					"purpose": "FeatureInsight",
-					"isMeasurement": true,
-					"comment": "Worst rank (highest index) among LLM-selected chunks in the original retrieval ranking."
-				},
-				"llmSelectedCount": {
-					"classification": "SystemMetaData",
-					"purpose": "FeatureInsight",
-					"isMeasurement": true,
-					"comment": "Number of chunks selected by LLM from the initial retrieval."
-				},
-				"rawLlmRankingResultsCount": {
-					"classification": "SystemMetaData",
-					"purpose": "FeatureInsight",
-					"isMeasurement": true,
-					"comment": "Number of raw results returned by the LLM."
-				},
-				"llmBestInRerank": {
-					"classification": "SystemMetaData",
-					"purpose": "FeatureInsight",
-					"isMeasurement": true,
-					"comment": "Best rank (lowest index) among LLM-selected chunks in the reranked results."
-				},
-				"llmWorstInRerank": {
-					"classification": "SystemMetaData",
-					"purpose": "FeatureInsight",
-					"isMeasurement": true,
-					"comment": "Worst rank (highest index) among LLM-selected chunks in the reranked results."
-				}
-			}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('semanticSearch.ranking', {}, {
 				llmBestRank: SemanticSearchTextSearchProvider.feedBackTelemetry.llmBestRank,
 				llmWorstRank: SemanticSearchTextSearchProvider.feedBackTelemetry.llmWorstRank,
@@ -574,16 +513,6 @@ export class SemanticSearchTextSearchProvider extends Disposable implements vsco
 						}
 					}
 				});
-
-			/* __GDPR__
-		"copilot.search.keywords" : {
-			"owner": "osortega",
-			"comment": "Copilot keywords request.",
-			"keywordResult": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Result of the copilot keywords request." },
-			"keywordsCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Count of keywords found by copilot search." },
-			"keywordSearchDuration": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Duration of the keyword search" }
-			}
-		*/
 			this._telemetryService.sendMSFTTelemetryEvent('copilot.search.keywords', {
 				keywordResult: fetchResult.type,
 			}, {

@@ -132,16 +132,6 @@ class CodeBlockIntelliSenseProvider implements vscode.DefinitionProvider, vscode
 		if (token.isCancellationRequested) {
 			return;
 		}
-
-		/* __GDPR__
-			"codeBlock.action.goTo" : {
-				"owner": "mjbvz",
-				"comment": "Counts interactions with code blocks in chat responses",
-				"languageId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Language of the currently open document." },
-				"command": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The go to command being run." },
-				"codeBlockId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Unique hash of the code block." }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('codeBlock.action.goTo', {
 			languageId: document.languageId,
 			command,

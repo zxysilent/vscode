@@ -238,14 +238,6 @@ export class ProductionEndpointProvider extends Disposable implements IEndpointP
 			return;
 		}
 		this._lastOverrideTelemetryFingerprint.set(family, 'applied');
-
-		/* __GDPR__
-			"chat.utilityModelOverride" : {
-				"owner": "vrbhardw",
-				"comment": "Tracks adoption of the chat.utilityModel / chat.utilitySmallModel settings. Emitted at most once per family per session when the configured override successfully resolves to a model.",
-				"family": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Which utility slot was resolved: 'copilot-utility' or 'copilot-utility-small'." }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent(
 			'chat.utilityModelOverride',
 			{

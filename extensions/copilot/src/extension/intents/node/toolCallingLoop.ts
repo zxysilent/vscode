@@ -1142,16 +1142,6 @@ export abstract class ToolCallingLoop<TOptions extends IToolCallingLoopOptions =
 						chunkSizeTotal += arg.limit;
 					}
 				}
-
-				/* __GDPR__
-					"readFileTrajectory" : {
-						"owner": "connor4312",
-						"comment": "read_file tool invokation trajectory",
-						"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that invoked the tool" },
-						"rounds": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of times the file was read sequentially" },
-						"avgChunkSize": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of lines read at a time" }
-					}
-				*/
 				this._telemetryService.sendMSFTTelemetryEvent('readFileTrajectory',
 					{
 						// model will be undefined in the simulator
@@ -1651,15 +1641,6 @@ export abstract class ToolCallingLoop<TOptions extends IToolCallingLoopOptions =
 			const allReasons = strippedToolCallCount > 0 ? [...filterReasons, `orphanedToolCalls:${strippedToolCallCount}`] : filterReasons;
 			const filterReasonsStr = allReasons.join(', ');
 			this._logService.warn('Filtered invalid tool messages: ' + filterReasonsStr);
-			/* __GDPR__
-					"toolCalling.invalidToolMessages" : {
-						"owner": "roblourens",
-						"comment": "Provides info about invalid tool messages that were rendered in a prompt",
-						"filterReasons": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Reasons for filtering the messages and stripping orphaned tool calls." },
-						"filterCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Count of filtered messages." },
-						"strippedToolCallCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Count of orphaned tool_calls stripped from assistant messages." }
-					}
-				*/
 			this._telemetryService.sendMSFTTelemetryEvent('toolCalling.invalidToolMessages', {
 				filterReasons: filterReasonsStr,
 			}, {

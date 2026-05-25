@@ -234,25 +234,6 @@ class EditIntentRequestHandler {
 		const editCodeStep = (currentTurnMetadata instanceof EditCodeIntentInvocation ? currentTurnMetadata._editCodeStep : undefined);
 
 		if (editCodeStep?.telemetryInfo) {
-			/* __GDPR__
-					"panel.edit.codeblocks" : {
-						"owner": "joyceerhl",
-						"comment": "Records information about the proposed edit codeblocks in an editing session",
-						"conversationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Id for the current chat conversation." },
-						"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the request succeeded or failed." },
-						"workingSetCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of entries in the working set" },
-						"uniqueCodeblockUriCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of unique code block URIs" },
-						"codeblockCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of code blocks in the response" },
-						"codeblockWithUriCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of code blocks that had URIs" },
-						"codeblockWithElidedCodeCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of code blocks that had a ...existing code... comment" },
-						"shellCodeblockCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of shell code blocks in the response" },
-						"shellCodeblockWithUriCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of shell code blocks that had URIs" },
-						"shellCodeblockWithElidedCodeCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of shell code blocks that had a ...existing code... comment" },
-						"editStepCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of edit steps in the session so far" },
-						"sessionDuration": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The time since the session started" },
-						"intentId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The ID of the intent being executed" }
-					}
-				*/
 			this.telemetryService.sendMSFTTelemetryEvent('panel.edit.codeblocks', {
 				conversationId: this.conversation.sessionId,
 				outcome: Boolean(result.errorDetails) ? 'error' : 'success',
@@ -425,14 +406,6 @@ export class EditCodeIntentInvocation implements IIntentInvocation {
 	}
 
 	private sendPromptRenderTelemetry(duration: number) {
-		/* __GDPR__
-			"editCodeIntent.promptRender" : {
-				"owner": "roblourens",
-				"comment": "Understanding the performance of the edit code intent rendering",
-				"promptRenderDurationIncludingRunningTools": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Duration of the prompt rendering, includes running tools" },
-				"isAgentMode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the prompt was for agent mode" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('editCodeIntent.promptRender', {
 		}, {
 			promptRenderDurationIncludingRunningTools: duration,

@@ -123,17 +123,6 @@ ToolRegistry.registerTool(GetNotebookCellOutputTool);
 
 async function sendOutcomeTelemetry(telemetryService: ITelemetryService, endpointProvider: IEndpointProvider | undefined, options: vscode.LanguageModelToolInvocationOptions<IGetNotebookCellOutputToolParams>, outcome: string) {
 	const model = (options.model && endpointProvider && (await endpointProvider.getChatEndpoint(options.model)).model);
-
-	/* __GDPR__
-		"getNotebookCellOutput.toolOutcome" : {
-			"owner": "donjayamanne",
-			"comment": "Tracks the tool used to get Notebook cell outputs",
-			"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-			"isNotebook": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the document is a notebook (this measure is used to identify notebook related telemetry)." },
-			"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Outcome of the edit operation" },
-			"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model used for the request." }
-		}
-	*/
 	telemetryService.sendMSFTTelemetryEvent('getNotebookCellOutput.toolOutcome',
 		{ requestId: options.chatRequestId, outcome, model }, { isNotebook: 1 }
 	);

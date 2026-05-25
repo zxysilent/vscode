@@ -735,17 +735,6 @@ export class MemoryTool implements ICopilotTool<MemoryToolParams> {
 	}
 
 	private _sendLocalTelemetry(command: string, scope: MemoryScope, toolOutcome: MemoryToolOutcome, requestId?: string, model?: vscode.LanguageModelChat): void {
-		/* __GDPR__
-			"memoryToolInvoked" : {
-				"owner": "digitarald",
-				"comment": "Tracks memory tool invocations for local user, session, and repo scopes",
-				"command": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The memory command executed (view, create, str_replace, insert, delete, rename)" },
-				"scope": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The memory scope: user, session, or repo" },
-				"toolOutcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Normalized outcome: success, error, notFound" },
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn" },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that invoked the tool" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('memoryToolInvoked', {
 			command,
 			scope,

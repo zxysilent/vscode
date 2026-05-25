@@ -76,12 +76,6 @@ export class VerifyTextDocumentChanges extends Disposable {
 		const previousValue = this._documentStates.get(docUri);
 
 		if (previousValue === undefined) {
-			/* __GDPR__
-				"vscode.contentChangeForUnknownDocument" : {
-					"owner": "hediet",
-					"comment": "Telemetry for verifying VSCode content change API consistency"
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('vscode.contentChangeForUnknownDocument', {}, {});
 			return;
 		}
@@ -92,18 +86,6 @@ export class VerifyTextDocumentChanges extends Disposable {
 		const expectedText = edit.apply(previousValue.text);
 
 		if (expectedText !== currentText) {
-			/* __GDPR__
-				"vscode.contentChangeInconsistencyDetected" : {
-					"owner": "hediet",
-					"comment": "Telemetry for verifying VSCode content change API consistency",
-					"languageId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Language of the currently open document." },
-					"sourceOfChange": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Source of the change." },
-					"reason": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Reason for change (1 = undo, 2 = redo).", "isMeasurement": true },
-					"previousLineFeed": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Line feed of the previously open document.", "isMeasurement": true },
-					"currentLineFeed": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Line feed of the currently open document.", "isMeasurement": true },
-					"scheme": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Scheme of the currently open document." }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('vscode.contentChangeInconsistencyDetected', {
 				languageId: e.document.languageId,
 				scheme: e.document.uri.scheme,

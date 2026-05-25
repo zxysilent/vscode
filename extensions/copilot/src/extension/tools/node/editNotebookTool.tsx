@@ -630,18 +630,6 @@ ToolRegistry.registerTool(EditNotebookTool);
 export async function sendEditNotebookTelemetry(telemetryService: ITelemetryService, endpointProvider: IEndpointProvider | undefined, toolUsedToEditNotebook: 'notebookEdit' | 'applyPatch' | 'stringReplace' | 'newNotebookIntent' | 'editCodeIntent' | 'insertEdit' | 'createFile', resource: vscode.Uri, requestId?: string, chatModel?: vscode.LanguageModelChat | string, endpoint?: IChatEndpoint) {
 	const resourceHash = await createSha256Hash(resource.fsPath);
 	const model = typeof chatModel === 'string' ? chatModel : (endpoint?.model ?? (chatModel && endpointProvider && (await endpointProvider.getChatEndpoint(chatModel)).model));
-
-	/* __GDPR__
-		"editNotebook.toolUsed" : {
-			"owner": "donjayamanne",
-			"comment": "Tracks the tool used to edit Notebook documents",
-			"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-			"resourceHash": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The hash of the resource of the current request turn. (Notebook Uri)" },
-			"editTool": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Tool used to edit the notebook, one of 'notebookEdit' | 'applyPatch' | 'stringReplace' | 'newNotebookIntent' | 'editCodeIntent' | 'insertEdit' | 'createFile'" },
-			"isNotebook": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the document is a notebook (this measure is used to identify notebook related telemetry)." },
-			"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model used for the request." }
-		}
-	*/
 	telemetryService.sendMSFTTelemetryEvent('editNotebook.toolUsed',
 		{ requestId, editTool: toolUsedToEditNotebook, resourceHash, model }, { isNotebook: 1 }
 	);
@@ -649,18 +637,6 @@ export async function sendEditNotebookTelemetry(telemetryService: ITelemetryServ
 
 async function sendEditNotebookToolOutcomeTelemetry(telemetryService: ITelemetryService, endpointProvider: IEndpointProvider | undefined, options: vscode.LanguageModelToolInvocationOptions<IEditNotebookToolParams>, outcome: string, failureData?: string) {
 	const model = (options.model && endpointProvider && (await endpointProvider.getChatEndpoint(options.model)).model);
-
-	/* __GDPR__
-		"editNotebook.toolOutcome" : {
-			"owner": "donjayamanne",
-			"comment": "Tracks the tool used to edit Notebook documents",
-			"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-			"isNotebook": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the document is a notebook (this measure is used to identify notebook related telemetry)." },
-			"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Outcome of the edit operation" },
-			"failureData": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Additional data about the failure, if any" },
-			"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model used for the request." }
-		}
-	*/
 	telemetryService.sendMSFTTelemetryEvent('editNotebook.toolOutcome',
 		{ requestId: options.chatRequestId, outcome, model, failureData }, { isNotebook: 1 }
 	);
@@ -668,18 +644,6 @@ async function sendEditNotebookToolOutcomeTelemetry(telemetryService: ITelemetry
 
 async function sendEditNotebookCellOperationsTelemetry(telemetryService: ITelemetryService, endpointProvider: IEndpointProvider | undefined, options: vscode.LanguageModelToolInvocationOptions<IEditNotebookToolParams>, editOperation: 'insert' | 'edit' | 'delete' | undefined) {
 	const model = (options.model && endpointProvider && (await endpointProvider.getChatEndpoint(options.model)).model);
-	/* __GDPR__
-		"editNotebook.cellEditOps" : {
-			"owner": "donjayamanne",
-			"comment": "Tracks the tool used to edit Notebook documents",
-			"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-			"isNotebook": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the document is a notebook (this measure is used to identify notebook related telemetry)." },
-			"insert": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of cell inserts" },
-			"delete": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of cell deletes" },
-			"edit": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of cell edits" },
-			"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model used for the request." }
-		}
-	*/
 	telemetryService.sendMSFTTelemetryEvent('editNotebook.cellEditOps',
 		{ requestId: options.chatRequestId, model },
 		{
@@ -694,18 +658,6 @@ async function sendEditNotebookCellOperationsTelemetry(telemetryService: ITeleme
 async function sendEditNotebookCellTelemetry(telemetryService: ITelemetryService, hasCodeMarker: boolean, resource: vscode.Uri, options: vscode.LanguageModelToolInvocationOptions<IEditNotebookToolParams>, endpointProvider: IEndpointProvider) {
 	const resourceHash = await createSha256Hash(resource.fsPath);
 	const model = options.model && (await endpointProvider.getChatEndpoint(options.model)).model;
-
-	/* __GDPR__
-		"editNotebook.editCellWithCodeMarker" : {
-			"owner": "donjayamanne",
-			"comment": "Tracks the presence of code markers in code when editing Notebook cells",
-			"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-			"resourceHash": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The hash of the resource of the current request turn. (Notebook Uri)" },
-			"hasCodeMarker": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether there any code markers are present", "isMeasurement": true },
-			"isNotebook": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the document is a notebook (this measure is used to identify notebook related telemetry)." },
-			"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model used for the request." }
-		}
-	*/
 	telemetryService.sendMSFTTelemetryEvent('editNotebook.editCellWithCodeMarker',
 		{ requestId: options.chatRequestId, resourceHash, model }, { hasCodeMarker: hasCodeMarker ? 1 : 0, isNotebook: 1 }
 	);

@@ -104,20 +104,6 @@ export class SessionStoreTracker extends Disposable implements IExtensionContrib
 			try {
 				this._sessionStore.getStats();
 			} catch (err) {
-				/* __GDPR__
-"chronicle.localStore" : {
-"owner": "vijayu",
-"comment": "Tracks local session store operations (init, write, flush errors)",
-"operation": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The operation performed." },
-"sessionSource": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The agent name/source for the session, or unknown if unavailable." },
-"success": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether the operation succeeded." },
-"error": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "Truncated error message if failed." },
-"opsCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Number of buffered operations in a failed flush." },
-"filesCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Number of files tracked in first write." },
-"refsCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Number of refs tracked in first write." },
-"pendingSpansProcessed": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Number of pending tool spans processed on session init." }
-}
-*/
 				this._telemetryService.sendMSFTTelemetryErrorEvent('chronicle.localStore', {
 					operation: 'dbInit',
 					success: 'false',

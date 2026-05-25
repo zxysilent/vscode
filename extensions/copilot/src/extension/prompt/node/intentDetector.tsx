@@ -377,17 +377,6 @@ export class IntentDetector implements ChatParticipantDetectionProvider {
 		isRerunWithoutIntentDetection: boolean | undefined,
 		location: ChatLocation
 	) {
-		/* __GDPR__
-			"intentDetection" : {
-				"owner": "ulugbekna",
-				"comment": "Intent detection telemetry.",
-				"chatLocation": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Which chat (panel or inline) intent detection is used for." },
-				"preferredIntent": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Which intent was initially provided as preferred." },
-				"detectedIntent": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Intent that was detected by Copilot" },
-				"languageId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Language ID of the document for which intent detection happened." },
-				"isRerunWithoutIntentDetection": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the user disliked the detected intent and tried to rerun without it." }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent(
 			'intentDetection',
 			{

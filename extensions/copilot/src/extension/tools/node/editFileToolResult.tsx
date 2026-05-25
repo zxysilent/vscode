@@ -176,19 +176,6 @@ export class EditFileResult extends PromptElement<IEditFileResultProps> {
 
 	private async sendEditFileResultTelemetry(totalNewDiagnostics: number, filesWithNewDiagnostics: number) {
 		const model = this.props.model && (await this.endpointProvider.getChatEndpoint(this.props.model)).model;
-
-		/* __GDPR__
-			"editFileResult.diagnostics" : {
-				"owner": "roblourens",
-				"comment": "Tracks whether new diagnostics were found after editing files",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"toolName": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The name of the tool that performed the edit" },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that invoked the tool" },
-				"totalNewDiagnostics": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of new diagnostics found across all files" },
-				"filesWithNewDiagnostics": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of files that had new diagnostics" },
-				"totalFilesEdited": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of files that were edited" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('editFileResult.diagnostics',
 			{
 				requestId: this.props.requestId!,

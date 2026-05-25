@@ -86,14 +86,6 @@ export class OTelContrib extends Disposable implements IExtensionContribution {
 
 			await vscode.workspace.fs.copy(src, dest, { overwrite: true });
 			this._logService.info(`[OTel] Exported agent-traces.db to ${dest.fsPath}`);
-
-			/* __GDPR__
-				"otel.exportAgentTracesDB" : {
-					"owner": "zhichli",
-					"comment": "Fired when the user exports the agent-traces.db file",
-					"interactive": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the export was interactive (save dialog) or programmatic (eval harness)" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('otel.exportAgentTracesDB', {
 				interactive: String(!savePath),
 			});
@@ -147,21 +139,6 @@ export class OTelContrib extends Disposable implements IExtensionContribution {
 
 	private _fireActivatedTelemetry(): void {
 		const config = this._otelService.config;
-		/* __GDPR__
-			"otel.activated" : {
-				"owner": "zhichli",
-				"comment": "Fired once at activation to capture OTel configuration for adoption tracking",
-				"enabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the full OTel SDK is loaded" },
-				"enabledVia": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "How OTel was enabled: envVar, setting, otlpEndpointEnvVar, dbSpanExporterOnly, or disabled" },
-				"dbSpanExporter": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the SQLite local DB span exporter is enabled" },
-				"exporterType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The OTel exporter type: otlp-grpc, otlp-http, console, or file" },
-				"captureContent": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether prompt/response content capture is enabled" },
-				"protocol": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "OTLP protocol: grpc or http" },
-				"hasCustomEndpoint": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether a non-default OTLP endpoint was configured" },
-				"hasCustomServiceName": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether OTEL_SERVICE_NAME was customized from the default" },
-				"hasResourceAttributes": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether custom OTEL_RESOURCE_ATTRIBUTES were set" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('otel.activated', {
 			enabled: String(config.enabled),
 			enabledVia: config.enabledVia,

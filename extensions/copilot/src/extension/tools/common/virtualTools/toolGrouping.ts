@@ -65,19 +65,6 @@ export class ToolGrouping implements IToolGrouping {
 		}
 
 		if (path.length > 1) { // only for tools in groups under the root
-			/* __GDPR__
-				"virtualTools.called" : {
-					"owner": "connor4312",
-					"comment": "Reports information about the usage of virtual tools.",
-					"callName": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Name of the categorized group (MCP or extension)" },
-					"isVirtual": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether this called a virtual tool", "isMeasurement": true },
-					"turnNo": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of turns into the loop when this expansion was made", "isMeasurement": true },
-					"depth": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Nesting depth of the tool", "isMeasurement": true },
-					"preExpanded": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the tool was pre-expanded or expanded on demand", "isMeasurement": true },
-					"wasEmbedding": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the tool was pre-expanded due to an embedding", "isMeasurement": true },
-					"totalTools": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Total number of tools available when this tool was called", "isMeasurement": true }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('virtualTools.called', {
 				callName: tool.name,
 			}, {

@@ -138,18 +138,6 @@ export class McpSetupCommands extends Disposable {
 				finalState = FlowFinalState.Done;
 				return result;
 			} finally {
-				/* __GDPR__
-					"mcp.setup.flow" : {
-						"owner": "joelverhagen",
-						"comment": "Reports the result of the agent-assisted MCP server installation",
-						"finalState": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The final state of the installation (e.g., 'Done', 'Failed')" },
-						"configurationType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Generic configuration typed produced by the installation" },
-						"packageType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Package type (e.g., npm)" },
-						"packageName": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight", "comment": "Package name used for installation" },
-						"packageVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Package version" },
-						"durationMs": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Duration of the installation process in milliseconds" }
-					}
-				*/
 				this.telemetryService.sendMSFTTelemetryEvent('mcp.setup.flow', {
 					finalState: finalState,
 					configurationType: result?.type,
@@ -167,19 +155,6 @@ export class McpSetupCommands extends Disposable {
 			if (result.state === 'ok') {
 				this.enqueuePendingSetup(args, result, sw);
 			}
-
-			/* __GDPR__
-				"mcp.setup.validatePackage" : {
-					"owner": "joelverhagen",
-					"comment": "Reports success or failure of agent-assisted MCP server validation step",
-					"state": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Validation state of the package" },
-					"packageType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Package type (e.g., npm)" },
-					"packageName": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight", "comment": "Package name used for installation" },
-					"packageVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Package version" },
-					"errorType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Generic type of error encountered during validation" },
-					"durationMs": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Duration of the validation process in milliseconds" }
-				}
-			*/
 			this.telemetryService.sendMSFTTelemetryEvent(
 				'mcp.setup.validatePackage',
 				result.state === 'ok' ?

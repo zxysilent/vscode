@@ -44,16 +44,6 @@ export async function fetchWithFallbacks(availableFetchers: readonly IFetcher[],
 					return { response: retry.response };
 				}
 				logService.info(`FetcherService: using ${fetcher.getUserAgentLibrary()} from now on`);
-				/* __GDPR__
-					"fetcherFallback" : {
-						"owner": "chrmarti",
-						"comment": "Sent when the fetcher service switches to a fallback fetcher due to the primary fetcher failing",
-						"newFetcher": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The name of the fetcher that is now being used" },
-						"knownBadFetchers": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Comma-separated list of fetchers that are known to be failing" },
-						"knownBadFetchersCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of fetchers that are known to be failing" },
-						"lastError": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The last error encountered, containing fetcher ID, status code and error message" }
-					}
-				*/
 				telemetryService?.sendTelemetryEvent('fetcherFallback', { github: true, microsoft: true }, {
 					newFetcher: fetcher.getUserAgentLibrary(),
 					knownBadFetchers: Array.from(updatedKnownBadFetchers).join(','),
@@ -103,15 +93,6 @@ export async function fetchWithFallbacks(availableFetchers: readonly IFetcher[],
 				await fetcher.disconnectAll();
 				const response = await fetcher.fetch(url, options);
 				logService.info(`FetcherService: ${fetcherId} retry after crash succeeded.`);
-				/* __GDPR__
-					"fetcherCrashRetry" : {
-						"owner": "deepak1556",
-						"comment": "Sent when a fetcher retries after a network process crash error",
-						"fetcher": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The fetcher that crashed" },
-						"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the retry recovered or failed" },
-						"error": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The error message" }
-					}
-				*/
 				telemetryService?.sendTelemetryEvent('fetcherCrashRetry', { github: true, microsoft: true }, {
 					fetcher: fetcherId,
 					outcome: 'recovered',

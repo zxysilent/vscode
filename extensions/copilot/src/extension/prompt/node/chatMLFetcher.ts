@@ -1895,17 +1895,6 @@ export class ChatMLFetcherImpl extends AbstractChatMLFetcher {
 			this._telemetryService.sendEnhancedGHTelemetryEvent('conversation.repetition.detected', extended.properties, extended.measurements);
 		}
 		if (lineRepetitionStats.numberOfRepetitions >= 10) {
-			/* __GDPR__
-				"conversation.repetition.detected" : {
-					"owner": "lramos15",
-					"comment": "Calculates the number of repetitions in a response. Useful for loop detection",
-					"finishReason": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Reason for why a response finished. Helps identify cancellation vs length limits" },
-					"requestId": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Id for this message request." },
-					"lengthOfLine": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Length of the repeating line, in characters." },
-					"numberOfRepetitions": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Number of times the line repeats." },
-					"totalLines": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Number of total lines in the response." }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('conversation.repetition.detected', {
 				requestId: chatCompletion.requestId.headerRequestId,
 				finishReason: chatCompletion.finishReason,

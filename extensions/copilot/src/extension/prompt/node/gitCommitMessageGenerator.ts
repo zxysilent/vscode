@@ -55,21 +55,6 @@ export class GitCommitMessageGenerator {
 				{ temperature },
 				true
 			);
-
-		/* __GDPR__
-			"git.generateCommitMessage" : {
-				"owner": "lszomoru",
-				"comment": "Metadata about the git commit message generation",
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that is used in the endpoint." },
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"responseType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The result type of the response." },
-				"attemptCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "How many times the user has retried." },
-				"diffFileCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of files in the commit." },
-				"diffLength": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The length of the diffs in the commit." },
-				"timeToRequest": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "How long it took to start the request." },
-				"timeToComplete": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "How long it took to complete the request." }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('git.generateCommitMessage', {
 			model: endpoint.model,
 			requestId: fetchResult.requestId,
@@ -93,14 +78,6 @@ export class GitCommitMessageGenerator {
 
 		const [responseFormat, commitMessage] = this.processGeneratedCommitMessage(fetchResult.value);
 		if (responseFormat !== 'oneTextCodeBlock') {
-			/* __GDPR__
-				"git.generateCommitMessageIncorrectResponseFormat" : {
-					"owner": "lszomoru",
-					"comment": "Metadata about the git commit message generation when the response is not in the expected format",
-					"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-					"responseFormat": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The type of the response format." }
-				}
-			*/
 			this.telemetryService.sendMSFTTelemetryEvent('git.generateCommitMessageIncorrectResponseFormat', { requestId: fetchResult.requestId, responseFormat });
 		}
 

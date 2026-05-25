@@ -351,18 +351,6 @@ export class GithubApiFetcherService extends Disposable implements IGithubApiFet
 					}
 					this.logService.error(`GithubApiFetcherService: ${options.method} ${options.telemetry.urlId} failed with status '${res.status}', github requestId: '${requestId}', body: ${responseBody}`,);
 				}
-
-				/* __GDPR__
-					"githubApiFetcherService.request.error" : {
-						"owner": "copilot-core",
-						"comment": "Logging when a GitHub API request fails",
-						"urlId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "A stable identifier for the URL" },
-						"method": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The HTTP method used" },
-						"caller": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Caller" },
-						"statusCode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The response status code" },
-						"willRetry": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the request will be retried" }
-					}
-				*/
 				this.telemetryService.sendMSFTTelemetryEvent('githubApiFetcherService.request.error', {
 					urlId: options.telemetry.urlId,
 					method: options.method,

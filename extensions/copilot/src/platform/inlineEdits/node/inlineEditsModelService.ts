@@ -386,16 +386,6 @@ export class InlineEditsModelService extends Disposable implements IInlineEditsM
 		} catch (e: unknown) {
 			errorMessage = ErrorUtils.toString(ErrorUtils.fromUnknown(e));
 		}
-
-		/* __GDPR__
-			"incorrectNesModelConfig" : {
-				"owner": "ulugbekna",
-				"comment": "Capture if model configuration string is invalid or malformed.",
-				"configName": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Name of the configuration that failed to parse." },
-				"errorMessage": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Error message from parsing or validation." },
-				"configValue": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The invalid config string." }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('incorrectNesModelConfig', { configName: configKey.id, errorMessage, configValue: configString });
 		return undefined;
 	}

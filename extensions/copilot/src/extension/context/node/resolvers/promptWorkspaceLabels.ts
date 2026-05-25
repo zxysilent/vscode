@@ -61,15 +61,6 @@ export class PromptWorkspaceLabels implements IPromptWorkspaceLabels {
 		await this.workspaceLabels.collectContext();
 
 		const uniqueLabels = [...new Set(this.labels)].sort();
-
-		/* __GDPR__
-			"projectLabels" : {
-				"owner": "digitarald",
-				"comment": "Reports quality of labels detected in a workspace",
-				"labels": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Unique workspace label count." },
-				"count": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Unique workspace labels in context." }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('projectLabels', {
 			labels: uniqueLabels.join(',').replaceAll('@', ' ')
 		}, {

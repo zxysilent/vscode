@@ -167,17 +167,6 @@ export class SurveyService implements ISurveyService {
 		const source = this.lastSource || '';
 		const language = this.lastLanguageId || '';
 		const firstSeenInDays = Math.floor((Date.now() - usage.firstActive) / (1000 * 60 * 60 * 24));
-		/* __GDPR__
-			"survey.show" : {
-				"owner": "digitarald",
-				"comment": "Measures survey notification result",
-				"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The last used feature before the survey." },
-				"language": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The last used editor language before the survey." },
-				"activeDays": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of days the user has used the extension." },
-				"firstActive": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The number of days since the user first used the extension." },
-				"surveyType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The type of survey being prompted." }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('survey.show', {
 			source,
 			language,
@@ -194,17 +183,6 @@ export class SurveyService implements ISurveyService {
 		vscode.window.showInformationMessage(l10n.t('Got a minute? Help us make GitHub Copilot better.'), confirmation, later, skip).then(async selection => {
 			const accepted = selection === confirmation;
 			const postponed = selection === later;
-
-			/* __GDPR__
-				"survey.action" : {
-					"owner": "digitarald",
-					"comment": "Measures survey notification result",
-					"source": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source of the survey prompt." },
-					"language": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The last used editor language before the survey." },
-					"selection": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The user's selection." },
-					"surveyType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The type of survey being prompted." }
-				}
-			*/
 			this.telemetryService.sendMSFTTelemetryEvent('survey.action', {
 				source,
 				language,

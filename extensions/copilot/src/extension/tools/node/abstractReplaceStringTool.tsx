@@ -315,21 +315,6 @@ export abstract class AbstractReplaceStringTool<T extends { explanation: string 
 					// The tool can't wait for edits to be applied, so just wait before starting the survival tracker.
 					// TODO@roblourens see if this improves the survival metric, find a better fix.
 					editSurvivalTracker?.startReporter(res => {
-						/* __GDPR__
-							"codeMapper.trackEditSurvival" : {
-								"owner": "aeschli",
-								"comment": "Tracks how much percent of the AI edits survived after 5 minutes of accepting",
-								"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-								"speculationRequestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the speculation request." },
-								"requestSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The source from where the request was made" },
-								"chatRequestModel": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model used for the base chat request to generate the edit object." },
-								"mapper": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The code mapper used: One of 'fast', 'fast-lora', 'full' and 'patch'" },
-								"survivalRateFourGram": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The rate between 0 and 1 of how much of the AI edit is still present in the document." },
-								"survivalRateNoRevert": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The rate between 0 and 1 of how much of the ranges the AI touched ended up being reverted." },
-								"didBranchChange": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Indicates if the branch changed in the meantime. If the branch changed (value is 1), this event should probably be ignored." },
-								"timeDelayMs": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The time delay between the user accepting the edit and measuring the survival rate." }
-							}
-						*/
 						res.telemetryService.sendMSFTTelemetryEvent('codeMapper.trackEditSurvival', { requestId: this._promptContext?.requestId, requestSource: 'agent', mapper: 'stringReplaceTool' }, {
 							survivalRateFourGram: res.fourGram,
 							survivalRateNoRevert: res.noRevert,
@@ -497,19 +482,6 @@ export abstract class AbstractReplaceStringTool<T extends { explanation: string 
 		const model = await this.modelForTelemetry(options);
 		const isNotebook = isNotebookDocument ? 1 : (isNotebookDocument === false ? 0 : -1);
 		const isMulti = this.toolName() === ToolName.MultiReplaceString ? 1 : 0;
-		/* __GDPR__
-			"replaceStringToolInvoked" : {
-				"owner": "roblourens",
-				"comment": "The replace_string tool was invoked",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"interactionId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current interaction." },
-				"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the invocation was successful, or a failure reason" },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that invoked the tool" },
-				"isNotebook": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the document is a notebook, 1 = yes, 0 = no, other = unknown." },
-				"didHeal": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the document is a notebook, 1 = yes, 0 = no, other = unknown." },
-				"isMulti": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the document is a multi-replace operation, 1 = yes, 0 = no." }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('replaceStringToolInvoked',
 			{
 				requestId: options.chatRequestId,
@@ -529,19 +501,6 @@ export abstract class AbstractReplaceStringTool<T extends { explanation: string 
 	}
 
 	private async sendHealingTelemetry(options: vscode.LanguageModelToolInvocationOptions<T> | vscode.LanguageModelToolInvocationPrepareOptions<T>, healError: string | undefined, applicationError: string | undefined) {
-		/* __GDPR__
-			"replaceStringHealingStat" : {
-				"owner": "roblourens",
-				"comment": "The replace_string tool was invoked",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"interactionId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current interaction." },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that invoked the tool" },
-				"outcome": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the invocation was successful, or a failure reason" },
-				"healError": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Any error that happened during healing" },
-				"applicationError": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Any error that happened after application" },
-				"success": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the document is a notebook, 1 = yes, 0 = no, other = unknown." }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('replaceStringHealingStat',
 			{
 				requestId: options.chatRequestId,

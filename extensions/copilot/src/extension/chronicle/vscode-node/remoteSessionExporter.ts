@@ -790,26 +790,6 @@ export class RemoteSessionExporter extends Disposable implements IExtensionContr
 			const repo = await this._resolveRepository();
 			if (!repo) {
 				this._disabledSessions.add(sessionId);
-				/* __GDPR__
-					"chronicle.cloudSync" : {
-						"owner": "vijayu",
-						"comment": "Tracks cloud sync operations (session init, creation, flush, errors, volume metrics)",
-						"operation": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The operation performed." },
-						"sessionSource": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The agent name/source for the session, or unknown if unavailable." },
-						"success": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether the operation succeeded." },
-						"error": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "Truncated error message if failed." },
-						"indexingLevel": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The indexing level for the session." },
-						"droppedEvents": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Number of events in a failed batch." },
-						"reason": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Reason session was disabled (no_consent, no_repo, init_error, create_error)." },
-						"transition": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Circuit breaker state transition (open, closed)." },
-						"eventsCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of actually submitted events (sum of eventsBySession sizes)." },
-						"orphanedCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of orphaned events not submitted (re-queued or dropped)." },
-						"batchDurationMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Time to submit batch in ms." },
-						"bufferSize": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Buffer size at time of event." },
-						"failureCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Consecutive failure count." },
-						"droppedCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Events dropped due to buffer overflow." }
-					}
-				*/
 				this._telemetryService.sendMSFTTelemetryEvent('chronicle.cloudSync', {
 					operation: 'sessionDisabled',
 					sessionSource,

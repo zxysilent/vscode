@@ -469,17 +469,6 @@ export class GithubCodeSearchRepo extends BaseRemoteCodeSearchRepo {
 			}
 		})(), unindexRepoInitTimeout), (execTime, status) => {
 			const endRepoStatus = this.status;
-
-			/* __GDPR__
-				"codeSearchChunkSearch.perf.tryToInstantIndexRepo" : {
-					"owner": "mjbvz",
-					"comment": "Total time for instant indexing to complete",
-					"status": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "If the call succeeded or failed" },
-					"startRepoStatus": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Initial status of the repo" },
-					"endRepoStatus": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Final status of the repo" },
-					"execTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Time in milliseconds that the call took" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('codeSearchChunkSearch.perf.tryToInstantIndexRepo', {
 				status,
 				startRepoStatus,

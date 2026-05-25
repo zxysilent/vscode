@@ -62,14 +62,6 @@ export class ChatSessionsUriHandler extends Disposable implements CustomUriHandl
 					const prId = params.get('id');
 					const url = decodeURIComponent(params.get('url') || '');
 					const branch = decodeURIComponent(params.get('branch') || '');
-					/* __GDPR__
-						"copilot.codingAgent.deeplink" : {
-							"owner": "rebornix",
-							"comment": "Reports when the ChatSessionsUriHandler handles a URI to open a chat session",
-							"sessionType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The type of chat session" },
-							"hasId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the session has an ID" }
-						}
-					*/
 					this._telemetryService.sendTelemetryEvent('copilot.codingAgent.deeplink', { microsoft: true, github: false }, {
 						sessionType: type || 'unknown',
 						hasId: prId ? 'true' : 'false',

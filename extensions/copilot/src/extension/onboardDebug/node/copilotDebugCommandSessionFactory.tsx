@@ -60,13 +60,6 @@ export class CopilotDebugCommandSessionFactory {
 	) { }
 
 	public async start({ args, cwd, forceNew, printOnly, save }: IStartOptions, token: CancellationToken): Promise<StartResult> {
-		/* __GDPR__
-		"onboardDebug.commandExecuted" : {
-			"owner": "connor4312",
-			"comment": "Reports usages of the copilot-debug command",
-			"binary": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Binary executed with the command" }
-		}
-		*/
 		this.telemetry.sendMSFTTelemetryEvent('onboardDebug.commandExecuted', {
 			binary: args[0],
 		});
@@ -92,15 +85,6 @@ export class CopilotDebugCommandSessionFactory {
 				inputs: [],
 				config: result.config!,
 			};
-
-			/* __GDPR__
-			"onboardDebug.sessionConfigGenerated" : {
-				"owner": "connor4312",
-				"comment": "Reports a generated config for the copilot-debug command",
-				"binary": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Binary executed with the command" },
-				"debugType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Debug type generated" }
-			}
-			*/
 			this.telemetry.sendMSFTTelemetryEvent('onboardDebug.sessionConfigGenerated', {
 				binary: args[0],
 				debugType: record.config.configurations[0].type,

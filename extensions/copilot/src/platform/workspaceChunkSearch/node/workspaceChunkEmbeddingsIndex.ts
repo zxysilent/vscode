@@ -143,15 +143,6 @@ export class WorkspaceChunkEmbeddingsIndex extends Disposable {
 
 			await this.indexAllWorkspaceFiles(trigger, {}, telemetryInfo.addCaller('WorkspaceChunkEmbeddingIndex::triggerIndexingOfWorkspace'), token);
 		}, (execTime, status) => {
-			/* __GDPR__
-				"workspaceChunkEmbeddingsIndex.perf.triggerIndexingOfWorkspace" : {
-					"owner": "mjbvz",
-					"comment": "Total time for triggerIndexingOfWorkspace to complete",
-					"status": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "If the call succeeded or failed" },
-					"trigger": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "What triggered the call" },
-					"execTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Time in milliseconds that the call took" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('workspaceChunkEmbeddingsIndex.perf.triggerIndexingOfWorkspace', {
 				status,
 				trigger,
@@ -192,16 +183,6 @@ export class WorkspaceChunkEmbeddingsIndex extends Disposable {
 
 			return this.rankEmbeddings(queryEmbedding, fileChunksAndEmbeddings, maxResults);
 		}, (execTime, status) => {
-			/* __GDPR__
-				"workspaceChunkEmbeddingsIndex.perf.searchWorkspace" : {
-					"owner": "mjbvz",
-					"comment": "Total time for searchWorkspace to complete",
-					"status": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "If the call succeeded or failed" },
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-					"execTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Time in milliseconds that the call took" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('workspaceChunkEmbeddingsIndex.perf.searchWorkspace', {
 				status,
 				workspaceSearchSource: telemetryInfo.callTracker.toString(),
@@ -226,16 +207,6 @@ export class WorkspaceChunkEmbeddingsIndex extends Disposable {
 
 			return this.rankEmbeddings(queryEmbedding, fileChunksAndEmbeddings, maxResults);
 		}, (execTime, status) => {
-			/* __GDPR__
-				"workspaceChunkEmbeddingsIndex.perf.searchSubsetOfFiles" : {
-					"owner": "mjbvz",
-					"comment": "Total time for searchSubsetOfFiles to complete",
-					"status": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "If the call succeeded or failed" },
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-					"execTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Time in milliseconds that the call took" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('workspaceChunkEmbeddingsIndex.perf.searchSubsetOfFiles', {
 				status,
 				workspaceSearchSource: telemetry.info.callTracker.toString(),
@@ -310,15 +281,6 @@ export class WorkspaceChunkEmbeddingsIndex extends Disposable {
 						if (!resolvedFileSemanticChunks.has(key)) {
 							resolvedFileSemanticChunks.set(key, { chunk, distance: undefined });
 						}
-
-						/* __GDPR__
-							"workspaceChunkEmbeddingsIndex.toSemanticChunks.noSemanticChunkFound" : {
-								"owner": "mjbvz",
-								"comment": "Tracks errors related to mapping to semantic chunks",
-								"extname": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The file's extension" },
-								"semanticChunkCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of semantic chunks returned" }
-							}
-						*/
 						this._telemetryService.sendMSFTTelemetryEvent('workspaceChunkEmbeddingsIndex.toSemanticChunks.noSemanticChunkFound', {
 							extname: extname(file.uri),
 						}, {
@@ -370,19 +332,6 @@ export class WorkspaceChunkEmbeddingsIndex extends Disposable {
 				});
 			})), token);
 		}, (execTime, status) => {
-			/* __GDPR__
-				"workspaceChunkEmbeddingsIndex.perf.getAllWorkspaceEmbeddings" : {
-					"owner": "mjbvz",
-					"comment": "Total time for getAllWorkspaceEmbeddings to complete",
-					"status": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "If the call succeeded or failed" },
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-					"execTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Time in milliseconds that the call took" },
-					"totalFileCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of files we have in the workspace" },
-					"recomputedFileCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of files that were not in the cache" },
-					"recomputedTotalContentLength": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total length of text for recomputed files" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('workspaceChunkEmbeddingsIndex.perf.getAllWorkspaceEmbeddings', {
 				status,
 				workspaceSearchSource: telemetryInfo.callTracker.toString(),
@@ -448,19 +397,6 @@ export class WorkspaceChunkEmbeddingsIndex extends Disposable {
 			})), token);
 			return coalesce(chunksAndEmbeddings).flat();
 		}, (execTime, status) => {
-			/* __GDPR__
-				"workspaceChunkEmbeddingsIndex.perf.getEmbeddingsForFiles" : {
-					"owner": "mjbvz",
-					"comment": "Total time for getEmbeddingsForFiles to complete",
-					"status": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "If the call succeeded or failed" },
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-					"execTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Time in milliseconds that the call took" },
-					"totalFileCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of files we are searching" },
-					"recomputedFileCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of files that were not in the cache" },
-					"recomputedTotalContentLength": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total length of text for recomputed files" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('workspaceChunkEmbeddingsIndex.perf.getEmbeddingsForFiles', {
 				status,
 				workspaceSearchSource: telemetry.info.callTracker,

@@ -133,13 +133,6 @@ export class CopilotDebugCommandContribution extends Disposable implements vscod
 
 		const queryParams = new URLSearchParams(uri.query);
 		const referrer = queryParams.get('referrer');
-		/* __GDPR__
-			"uriHandler" : {
-				"owner": "lramos15",
-				"comment": "Reports when the uri handler is called in the copilot extension",
-				"referrer": { "classification": "SystemMetaData", "purpose": "BusinessInsight", "comment": "The referrer query param for the uri" }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('uriHandler', {
 			referrer: referrer || 'unknown',
 		});

@@ -201,14 +201,6 @@ export class AutomodeService extends Disposable implements IAutomodeService {
 		// Default model selection when router was skipped or failed
 		if (!selectedModel) {
 			if (routerFallbackReason) {
-				/* __GDPR__
-					"automode.routerFallback" : {
-						"owner": "lramos15",
-						"comment": "Reports when the auto mode router is skipped or fails and falls back to default model selection",
-						"reason": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The reason the router was skipped or failed, e.g. emptyPrompt, emptyCandidateList, noMatchingEndpoint, routerError, routerTimeout, or a server error code" },
-						"hasImage": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether the request contained an attached image" }
-					}
-				*/
 				this._telemetryService.sendMSFTTelemetryEvent('automode.routerFallback', {
 					reason: routerFallbackReason,
 					hasImage: String(hasImage(chatRequest)),
@@ -222,16 +214,6 @@ export class AutomodeService extends Disposable implements IAutomodeService {
 		// Emit the final model selection alongside the router's recommendation
 		// so analysts can detect overrides without fragile telemetry joins
 		if (!skipRouter && routerResult.candidateModel) {
-			/* __GDPR__
-				"automode.routerModelSelection" : {
-					"owner": "aashnagarg",
-					"comment": "Reports the router's recommended model vs the actual model used after all client-side overrides",
-					"conversationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The conversation ID" },
-					"candidateModel": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The router's top candidate model (candidate_models[0])" },
-					"actualModel": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model actually selected after all client-side overrides" },
-					"overrideReason": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Why the actual model differs from the candidate: none or clientOverride" }
-				}
-			*/
 			const candidateModel = routerResult.candidateModel;
 			const overrideReason = candidateModel === selectedModel.model ? 'none' : 'clientOverride';
 			this._telemetryService.sendMSFTTelemetryEvent('automode.routerModelSelection', {
@@ -384,15 +366,6 @@ export class AutomodeService extends Disposable implements IAutomodeService {
 			`[AutomodeService] No available_models matched knownEndpoints; using fallback endpoint '${fallbackEndpoint.model}'. ` +
 			`available_models=[${availableModels.join(', ')}], knownEndpoints=[${knownEndpoints.map(e => e.model).join(', ')}]`,
 		);
-		/* __GDPR__
-			"automode.noEndpointFallback" : {
-				"owner": "aashnagarg",
-				"comment": "Reports when AutoModels available_models has no overlap with knownEndpoints and the client falls back to the first known endpoint instead of failing.",
-				"availableModelCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Number of models in the AutoModels response" },
-				"knownEndpointCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Number of known endpoints from the Models API" },
-				"fallbackModel": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The model selected as the safe fallback" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('automode.noEndpointFallback',
 			{ fallbackModel: fallbackEndpoint.model },
 			{ availableModelCount: availableModels.length, knownEndpointCount: knownEndpoints.length },

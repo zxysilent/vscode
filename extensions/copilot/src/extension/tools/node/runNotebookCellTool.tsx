@@ -52,18 +52,6 @@ class RunNotebookTelemetryEvent {
 
 	public async send(telemetryService: ITelemetryService) {
 		const resourceHash = await createSha256Hash(this.filepath);
-
-		/* __GDPR__
-			"runNotebookCellInvoked" : {
-				"owner": "amunger",
-				"comment": "Tracks the usage and result ",
-				"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The id of the current request turn." },
-				"resourceHash": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The hash of the resource of the current request turn. (Notebook Uri)" },
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model used for the request." },
-				"result": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Result of the operation: success, failure, or unknown." },
-				"resultInfo": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Reason for failure if the result is failure." }
-			}
-		*/
 		telemetryService.sendMSFTTelemetryEvent('runNotebookCellInvoked',
 			{
 				requestId: this.requestId,

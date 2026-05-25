@@ -134,22 +134,6 @@ function sendNodeToDocumentTelemetry(
 	languageId: string,
 	timeSpentMs: number
 ) {
-
-	/* __GDPR__
-		"getNodeToDocument" : {
-			"owner": "ulugbekna",
-			"comment": "Info on success and properties of detecting AST node to document",
-			"languageId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The language ID of the document" },
-			"typeOfNodeToDocument": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Type of the AST node offered to be documented (type defined by tree-sitter grammar for that language)" },
-			"nodeToDocumentStart": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Start offset of the AST node offered to be documented (type defined by tree-sitter grammar for that language)" },
-			"nodeToDocumentEnd": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "End offset of the AST node offered to be documented (type defined by tree-sitter grammar for that language)" },
-			"selectionOffsetRangeStart": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The start offset range of the selection in the document" },
-			"selectionOffsetRangeEnd": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The end offset range of the selection in the document" },
-			"wholeRangeOffsetRangeStart": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The start offset range of the inline-chat wholeRange" },
-			"wholeRangeOffsetRangeEnd": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The end offset range of the inline-chat wholeRange" },
-			"timeSpentMs": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Time (in milliseconds) spent on finding the AST node to document (approximate as it's an async call)" }
-		}
-	*/
 	telemetryService.sendMSFTTelemetryEvent('getNodeToDocument',
 		{
 			languageId,

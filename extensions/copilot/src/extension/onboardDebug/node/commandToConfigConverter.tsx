@@ -81,15 +81,6 @@ export class DebugCommandToConfigConverter implements IDebugCommandToConfigConve
 		}
 
 		const config = parseLaunchConfigFromResponse(fetchResult.value, this.extensionsService);
-
-		/* __GDPR__
-		"onboardDebug.configGenerated" : {
-			"owner": "connor4312",
-			"comment": "Reports usages of the copilot-debug command",
-			"configGenerated": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether a config was generated", "isMeasurement": true },
-			"configType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "command": "launch.json config type generated, if any" }
-		}
-		*/
 		this.telemetry.sendMSFTTelemetryEvent('onboardDebug.configGenerated', {
 			configType: config?.configurations[0].type,
 		}, {

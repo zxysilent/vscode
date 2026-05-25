@@ -429,12 +429,6 @@ export async function getPullRequestFromGlobalId(
 		if (errorCode) {
 			properties.errorCode = errorCode;
 		}
-		/* __GDPR__
-			"pr.getPullRequestFromGlobalIdFailed" : {
-				"errorCode": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth" },
-				"requestFailed": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth" }
-			}
-		*/
 		telemetry.sendMSFTTelemetryErrorEvent('pr.getPullRequestFromGlobalIdFailed', properties);
 	}
 

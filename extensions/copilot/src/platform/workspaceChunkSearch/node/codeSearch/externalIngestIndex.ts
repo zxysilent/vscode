@@ -221,29 +221,11 @@ export class ExternalIngestIndex extends Disposable {
 			this._onDidChangeState.fire();
 
 			this._logService.info(`ExternalIngestIndex: Deleted index for fileset ${filesetName}`);
-
-			/* __GDPR__
-				"externalIngestIndex.deleteIndex" : {
-					"owner": "mjbvz",
-					"comment": "Logged when external ingest index is deleted successfully",
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the operation" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the operation" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('externalIngestIndex.deleteIndex', {
 				workspaceSearchSource: telemetryInfo.callTracker.toString(),
 				workspaceSearchCorrelationId: telemetryInfo.correlationId,
 			});
 		} catch (e) {
-			/* __GDPR__
-				"externalIngestIndex.deleteIndex.error" : {
-					"owner": "mjbvz",
-					"comment": "Logged when deleting external ingest index fails",
-					"error": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "The error message" },
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the operation" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the operation" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryErrorEvent('externalIngestIndex.deleteIndex.error', {
 				error: (e as Error).message,
 				workspaceSearchSource: telemetryInfo.callTracker.toString(),
@@ -379,18 +361,6 @@ export class ExternalIngestIndex extends Disposable {
 				);
 				if (result.isOk()) {
 					this.setCurrentIndexCheckpoint(result.val.checkpoint);
-
-					/* __GDPR__
-						"externalIngestIndex.updateIndex.success" : {
-							"owner": "mjbvz",
-							"comment": "Logged when external ingest index update completes successfully",
-"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the operation" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the operation" },
-					"durationMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Time taken to complete the update in milliseconds" },
-					"totalFileCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of files in the index" },
-					"updatedFileCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of files that were updated" }
-					}
-				*/
 					this._telemetryService.sendMSFTTelemetryEvent('externalIngestIndex.updateIndex.success', {
 						workspaceSearchSource: telemetryInfo.callTracker.toString(),
 						workspaceSearchCorrelationId: telemetryInfo.correlationId,
@@ -398,16 +368,6 @@ export class ExternalIngestIndex extends Disposable {
 
 					return Result.ok(true);
 				} else {
-					/* __GDPR__
-						"externalIngestIndex.updateIndex.error" : {
-							"owner": "mjbvz",
-							"comment": "Logged when external ingest index update fails",
-							"error": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "The error message" },
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the operation" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the operation" },
-					"durationMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Time taken before failure in milliseconds" }
-					}
-				*/
 					this._telemetryService.sendMSFTTelemetryErrorEvent('externalIngestIndex.updateIndex.error', {
 						error: result.err.message,
 						workspaceSearchSource: telemetryInfo.callTracker.toString(),
@@ -422,17 +382,6 @@ export class ExternalIngestIndex extends Disposable {
 				if (isCancellationError(e)) {
 					throw e;
 				}
-
-				/* __GDPR__
-					"externalIngestIndex.updateIndex.exception" : {
-						"owner": "mjbvz",
-						"comment": "Logged when external ingest index update throws an exception",
-						"error": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "The exception message" },
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the operation" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the operation" },
-					"durationMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Time taken before exception in milliseconds" }
-					}
-				*/
 				this._telemetryService.sendMSFTTelemetryErrorEvent('externalIngestIndex.updateIndex.exception', {
 					error: (e as Error).message,
 					workspaceSearchSource: telemetryInfo.callTracker.toString(),
@@ -528,18 +477,6 @@ export class ExternalIngestIndex extends Disposable {
 					},
 				};
 			}));
-
-			/* __GDPR__
-				"externalIngestIndex.search.success" : {
-					"owner": "mjbvz",
-					"comment": "Logged when external ingest search completes successfully",
-					"resultEmbeddingType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The embedding model used for the search" },
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-					"resultCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Number of chunks returned from the search" },
-					"durationMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Time taken to complete the search in milliseconds" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('externalIngestIndex.search.success', {
 				resultEmbeddingType: embeddingType.toString(),
 				workspaceSearchSource: telemetryInfo.callTracker.toString(),
@@ -552,15 +489,6 @@ export class ExternalIngestIndex extends Disposable {
 			return chunks;
 		} catch (e) {
 			if (isCancellationError(e)) {
-				/* __GDPR__
-					"externalIngestIndex.search.cancelled" : {
-						"owner": "mjbvz",
-						"comment": "Logged info about cancellation of external ingest search. Mostly for timeouts",
-						"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-						"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-						"durationMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Time taken before the search was cancelled or aborted in milliseconds" }
-					}
-				*/
 				this._telemetryService.sendMSFTTelemetryEvent('externalIngestIndex.search.cancelled', {
 					workspaceSearchSource: telemetryInfo.callTracker.toString(),
 					workspaceSearchCorrelationId: telemetryInfo.correlationId,
@@ -569,17 +497,6 @@ export class ExternalIngestIndex extends Disposable {
 				});
 				throw e;
 			}
-
-			/* __GDPR__
-				"externalIngestIndex.search.error" : {
-					"owner": "mjbvz",
-					"comment": "Logged when external ingest search fails",
-					"error": { "classification": "CallstackOrException", "purpose": "PerformanceAndHealth", "comment": "The error message" },
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-					"durationMs": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "isMeasurement": true, "comment": "Time taken before failure in milliseconds" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryErrorEvent('externalIngestIndex.search.error', {
 				error: (e as Error).message,
 				workspaceSearchSource: telemetryInfo.callTracker.toString(),

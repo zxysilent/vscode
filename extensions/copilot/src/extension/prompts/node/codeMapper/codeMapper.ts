@@ -465,27 +465,6 @@ export class CodeMapper {
 		const isNoopEdit = responseText.trim() === speculation.trim();
 
 		const { addedLines, removedLines } = await computeAdditionsAndDeletions(this.diffService, speculation, responseText);
-
-		/* __GDPR__
-			"speculation.response.success" : {
-				"owner": "alexdima",
-				"comment": "Report quality details for a successful speculative response.",
-				"chatRequestId": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Id of the current turn request" },
-				"chatRequestSource": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Source of the current turn request" },
-				"isNoopEdit": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether the response text is identical to the speculation." },
-				"speculationRequestId": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Id of the current turn request" },
-				"containsElidedCodeComments": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether the response text contains elided code comments." },
-				"model": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The model used for this speculation request" },
-				"promptTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of prompt tokens", "isMeasurement": true },
-				"speculationTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of speculation tokens", "isMeasurement": true },
-				"responseTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of response tokens", "isMeasurement": true },
-				"addedLines": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of lines added", "isMeasurement": true },
-				"removedLines": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of lines removed", "isMeasurement": true },
-				"isNotebook": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether this is a notebook", "isMeasurement": true },
-				"timeToFirstToken": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Time to first token", "isMeasurement": true },
-				"timeToComplete": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Time to complete the request", "isMeasurement": true }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('speculation.response.success', {
 			chatRequestId: telemetryInfo?.requestId,
 			chatRequestSource: telemetryInfo?.requestSource,
@@ -517,20 +496,6 @@ export class CodeMapper {
 		if (error) {
 			this.logService.error(error);
 		}
-		/* __GDPR__
-			"speculation.response.error" : {
-				"owner": "alexdima",
-				"comment": "Report quality issue for when a speculative response failed.",
-				"errorMessage": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The name of the error" },
-				"chatRequestId": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Id of the current turn request" },
-				"speculationRequestId": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Id of the speculation request" },
-				"chatRequestSource": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Source of the current turn request" },
-				"model": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The model used for this speculation request" },
-				"promptTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of prompt tokens", "isMeasurement": true },
-				"speculationTokenCount": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Number of speculation tokens", "isMeasurement": true },
-				"isNotebook": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether this is a notebook", "isMeasurement": true }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('speculation.response.error', {
 			errorMessage,
 			chatRequestId: telemetryInfo?.requestId,
@@ -744,18 +709,6 @@ export class CodeMapper {
 	}
 
 	private logCodemapperLoopTelemetry(request: ICodeMapperRequestInput, result: ChatResponse, uri: Uri, model: string, documentLength: number, responseLength: number, hasLoop: boolean) {
-		/* __GDPR__
-			"speculation.response.loop" : {
-				"owner": "joyceerhl",
-				"comment": "Report when the model appears to have gone into a loop.",
-				"hasLoop": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Whether the model appears to have gone into a loop." },
-				"speculationRequestId": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Id of the current turn request" },
-				"languageId": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The language id of the document" },
-				"model": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "The model used for this speculation request" },
-				"documentLength": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Length of original file", "isMeasurement": true },
-				"rewrittenLength": { "classification": "SystemMetaData", "purpose": "PerformanceAndHealth", "comment": "Length of original file", "isMeasurement": true }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('speculation.response.loop', {
 			speculationRequestId: result.requestId,
 			languageId: isNewDocument(request) ? getLanguageForResource(uri).languageId : request.existingDocument.languageId,

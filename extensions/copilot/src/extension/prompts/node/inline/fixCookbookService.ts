@@ -80,15 +80,6 @@ export class FixCookbookService implements IFixCookbookService {
 		}
 
 		// send telemetry
-		/* __GDPR__
-			"cookbook.accessed" : {
-				"owner": "luabud",
-				"comment": "Reports when a cookbook entry is accessed for a diagnostic.",
-				"languageID": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The current file language." },
-				"diagnosticCode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The diagnostic code accessed in the cookbook." },
-				"provider": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The tool which is the diagnostic provider." }
-				}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('cookbook.accessed', {
 			languageId,
 			diagnosticCode: diagnostic.toString(),

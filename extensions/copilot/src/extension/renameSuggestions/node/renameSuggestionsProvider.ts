@@ -390,26 +390,6 @@ export class RenameSuggestionsProvider implements vscode.NewSymbolNamesProvider 
 		replyFormat?: ReplyFormat;
 		symbolNamesCount?: number;
 	}) {
-		/* __GDPR__
-			"provideRenameSuggestions" : {
-				"owner": "ulugbekna",
-				"comment": "Telemetry for rename suggestions provided",
-				"languageId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Language ID of the document." },
-				"cancellationReason": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Specify when exactly during the provider call the cancellation happened. Empty string if the cancellation didn't happen." },
-				"fetchResultType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Result of a fetch to endpoint" },
-				"replyFormat": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Copilot reply format: 'jsonStringArray' | 'multiJsonStringArray' | 'list' | 'unknown'" },
-				"triggerKind": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Rename suggestion trigger kind - 'automatic' | 'manual'" },
-				"promptConstructionTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Time it took to construct the prompt", "isMeasurement": true },
-				"timeElapsedBeforeDelay": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Time elapsed before delay starts", "isMeasurement": true },
-				"promptTokenCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Token count of the prompt", "isMeasurement": true },
-				"expectedDelayBeforeFetch": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Expected delay before fetch dictated by the experiment 'renameSuggestionsDelayBeforeFetch'", "isMeasurement": true },
-				"actualDelayBeforeFetch": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Actual delay before fetch computed as 'expectedDelay - promptComputationTime'", "isMeasurement": true },
-				"successResponseCharCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Character count in model response (for response.type == 'success')", "isMeasurement": true },
-				"responseUnusedCharCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Character count in model response that was unused, e.g., rename explanations, response format overhead", "isMeasurement": true },
-				"fetchTime": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Time it took to fetch from endpoint", "isMeasurement": true },
-				"symbolNamesCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Number of suggested names", "isMeasurement": true }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent(
 			'provideRenameSuggestions',
 			{

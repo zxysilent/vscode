@@ -222,16 +222,6 @@ ELECTRON_RUN_AS_NODE=1 "${process.execPath}" "${path.join(storageLocation, COPIL
 	}
 
 	private sendTerminalOpenTelemetry(sessionType: string, shell: string, terminalCreationMethod: string, location: TerminalOpenLocation): void {
-		/* __GDPR__
-			"copilotcli.terminal.open" : {
-				"owner": "DonJayamanne",
-				"comment": "Event sent when a Copilot CLI terminal is opened.",
-				"sessionType" : { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Whether the terminal is for a new session or resuming an existing one." },
-				"shell" : { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The shell type used for the terminal." },
-				"terminalCreationMethod" : { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "How the terminal was created." },
-				"location" : { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Where the terminal was opened - panel, editor area (active), or editor area (beside)." }
-			}
-		*/
 		this.telemetryService.sendMSFTTelemetryEvent('copilotcli.terminal.open', {
 			sessionType,
 			shell,

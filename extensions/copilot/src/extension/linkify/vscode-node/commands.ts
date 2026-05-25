@@ -22,13 +22,6 @@ export function registerLinkCommands(
 ) {
 	return combinedDisposable(
 		vscode.commands.registerCommand(openFileLinkCommand, async (...[path, requestId]: OpenFileLinkCommandArgs) => {
-			/* __GDPR__
-				"panel.action.filelink" : {
-					"owner": "digitarald",
-					"comment": "Clicks on file links in the panel response",
-					"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Id of the chat request." }
-				}
-			*/
 			telemetryService.sendMSFTTelemetryEvent('panel.action.filelink', {
 				requestId
 			});
@@ -73,15 +66,6 @@ export function registerLinkCommands(
 
 			if (symbols?.length) {
 				const matchingSymbol = findBestSymbolByPath(symbols, symbolText);
-
-				/* __GDPR__
-					"panel.action.symbollink" : {
-						"owner": "digitarald",
-						"comment": "Clicks on symbol links in the panel response",
-						"hadMatch": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Whether the symbol was found." },
-						"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Id of the chat request." }
-					}
-				*/
 				telemetryService.sendMSFTTelemetryEvent('panel.action.symbollink', {
 					requestId,
 				}, {
@@ -102,15 +86,6 @@ export function registerLinkCommands(
 		// This is currently used by the inline code linkifier for links such as `symbolName`
 		vscode.commands.registerCommand(openSymbolFromReferencesCommand, async (...[_word, locations, requestId]: OpenSymbolFromReferencesCommandArgs) => {
 			const dest = await resolveSymbolFromReferences(locations, undefined, CancellationToken.None);
-
-			/* __GDPR__
-				"panel.action.openSymbolFromReferencesLink" : {
-					"owner": "mjbvz",
-					"comment": "Clicks on symbol links in the panel response",
-					"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "Id of the chat request." },
-					"resolvedDestinationType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "How the link was actually resolved." }
-				}
-			*/
 			telemetryService.sendMSFTTelemetryEvent('panel.action.openSymbolFromReferencesLink', {
 				requestId,
 				resolvedDestinationType: dest?.type ?? 'unresolved',

@@ -161,13 +161,6 @@ export class GithubCodeSearchService implements IGithubCodeSearchService {
 				}
 			}, { type: RequestType.EmbeddingsIndex, repoWithOwner: repoNwo }), token);
 			if (!statusRequest.ok) {
-				/* __GDPR__
-					"githubCodeSearch.getRemoteIndexState.error" : {
-						"owner": "mjbvz",
-						"comment": "Information about failed remote index state requests",
-						"statusCode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The response status code" }
-					}
-				*/
 				this._telemetryService.sendMSFTTelemetryEvent('githubCodeSearch.getRemoteIndexState.error', {}, {
 					statusCode: statusRequest.status,
 				});
@@ -236,17 +229,6 @@ export class GithubCodeSearchService implements IGithubCodeSearchService {
 
 		if (!response.ok) {
 			this._logService.error(`GithubCodeSearchService.triggerIndexing(${triggerReason}). Failed to request indexing for '${githubRepoId}'. Response: ${response.status}. ${await response.text()}`);
-
-			/* __GDPR__
-				"githubCodeSearch.triggerIndexing.error" : {
-					"owner": "mjbvz",
-					"comment": "Information about failed trigger indexing requests",
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-					"triggerReason": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Reason why the indexing was triggered" },
-					"statusCode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The response status code" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('githubCodeSearch.triggerIndexing.error', {
 				workspaceSearchSource: telemetryInfo.callTracker.toString(),
 				workspaceSearchCorrelationId: telemetryInfo.correlationId,
@@ -257,16 +239,6 @@ export class GithubCodeSearchService implements IGithubCodeSearchService {
 
 			return Result.error({ type: 'generic-error', error: new Error(`Failed to request indexing for '${githubRepoId}'. Response: ${response.status}.`) });
 		}
-
-		/* __GDPR__
-			"githubCodeSearch.getRemoteIndexState.success" : {
-				"owner": "mjbvz",
-				"comment": "Information about failed remote index state requests",
-				"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-				"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-				"triggerReason": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Reason why the indexing was triggered" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('githubCodeSearch.getRemoteIndexState.success', {
 			workspaceSearchSource: telemetryInfo.callTracker.toString(),
 			workspaceSearchCorrelationId: telemetryInfo.correlationId,
@@ -319,15 +291,6 @@ export class GithubCodeSearchService implements IGithubCodeSearchService {
 			token);
 
 		if (!response.ok) {
-			/* __GDPR__
-				"githubCodeSearch.searchRepo.error" : {
-					"owner": "mjbvz",
-					"comment": "Information about failed code searches",
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-					"statusCode": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "The response status code" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('githubCodeSearch.searchRepo.error', {
 				workspaceSearchSource: telemetryInfo.callTracker.toString(),
 				workspaceSearchCorrelationId: telemetryInfo.correlationId,
@@ -344,17 +307,6 @@ export class GithubCodeSearchService implements IGithubCodeSearchService {
 		}
 
 		const result = await raceCancellationError(parseGithubCodeSearchResponse(body, repo, options, this._ignoreService), token);
-
-		/* __GDPR__
-			"githubCodeSearch.searchRepo.success" : {
-				"owner": "mjbvz",
-				"comment": "Information about successful code searches",
-				"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-				"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-				"resultCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of returned chunks from the search" },
-				"resultOutOfSync": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Tracks if the commit we think code search has indexed matches the commit code search returns results from" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('githubCodeSearch.searchRepo.success', {
 			workspaceSearchSource: telemetryInfo.callTracker.toString(),
 			workspaceSearchCorrelationId: telemetryInfo.correlationId,
@@ -400,14 +352,6 @@ export class GithubCodeSearchService implements IGithubCodeSearchService {
 		), token);
 
 		if (!body) {
-			/* __GDPR__
-				"githubCodeSearch.lexicalSearch.error" : {
-					"owner": "mjbvz",
-					"comment": "Information about failed lexical code searches",
-					"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-					"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" }
-				}
-			*/
 			this._telemetryService.sendMSFTTelemetryEvent('githubCodeSearch.lexicalSearch.error', {
 				workspaceSearchSource: telemetryInfo.callTracker.toString(),
 				workspaceSearchCorrelationId: telemetryInfo.correlationId,
@@ -420,16 +364,6 @@ export class GithubCodeSearchService implements IGithubCodeSearchService {
 		}
 
 		const result = await raceCancellationError(parseLexicalSearchResponse(body, scope, options, this._ignoreService), token);
-
-		/* __GDPR__
-			"githubCodeSearch.lexicalSearch.success" : {
-				"owner": "mjbvz",
-				"comment": "Information about successful lexical code searches",
-				"workspaceSearchSource": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Caller of the search" },
-				"workspaceSearchCorrelationId": { "classification": "SystemMetaData", "purpose": "FeatureInsight",  "comment": "Correlation id for the search" },
-				"resultCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of returned items from the search" }
-			}
-		*/
 		this._telemetryService.sendMSFTTelemetryEvent('githubCodeSearch.lexicalSearch.success', {
 			workspaceSearchSource: telemetryInfo.callTracker.toString(),
 			workspaceSearchCorrelationId: telemetryInfo.correlationId,

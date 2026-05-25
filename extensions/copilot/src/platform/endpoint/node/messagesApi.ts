@@ -205,16 +205,6 @@ export function createMessagesRequestBody(accessor: ServicesAccessor, options: I
 	const lastMessage = messagesResult.messages.at(-1);
 	if (lastMessage && lastMessage.role === 'assistant') {
 		logService.warn(`[messagesAPI] Trailing assistant message detected — appending synthetic user message to prevent prefill error. Total messages: ${messagesResult.messages.length}`);
-
-		/* __GDPR__
-			"messagesApi.trailingAssistantGuard" : {
-				"owner": "bhavyaus",
-				"comment": "Tracks when a trailing assistant message is detected and a synthetic user message is appended to prevent prefill errors",
-				"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model being used" },
-				"location": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The chat location (agent, panel, etc)" },
-				"messageCount": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total number of messages in the conversation" }
-			}
-		*/
 		telemetryService.sendMSFTTelemetryEvent('messagesApi.trailingAssistantGuard',
 			{ model, location: ChatLocation.toString(options.location) },
 			{ messageCount: messagesResult.messages.length }
@@ -852,15 +842,6 @@ export async function processNonStreamingResponseFromMessagesEndpoint(
 					// Parity with streaming path: log + emit telemetry for unknown block types
 					const unknownType = (block as { type: string }).type;
 					logService.warn(`[messagesAPI] non-streaming: unknown content_block type '${unknownType}' for model ${parsed.model}`);
-					/* __GDPR__
-						"messagesApi.unknownContentBlock" : {
-							"owner": "bhavyaus",
-							"comment": "Tracks unknown Anthropic content block types",
-							"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request ID for correlation" },
-							"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that emitted the unknown block" },
-							"blockType": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The unknown content_block.type string" }
-						}
-					*/
 					telemetryService.sendMSFTTelemetryEvent('messagesApi.unknownContentBlock', {
 						requestId,
 						model: parsed.model,
@@ -888,16 +869,6 @@ export async function processNonStreamingResponseFromMessagesEndpoint(
 
 		if (parsed.stop_reason === 'refusal') {
 			logService.warn(`[messagesAPI] non-streaming: Refusal received for model ${parsed.model}`);
-
-			/* __GDPR__
-				"messagesApi.refusal" : {
-					"owner": "bhavyaus",
-					"comment": "Tracks Anthropic refusal responses including cyber and other policy categories",
-					"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request ID for correlation" },
-					"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that produced the refusal" },
-					"category": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The refusal category (e.g. cyber, content_policy)" }
-				}
-			*/
 			telemetryService.sendMSFTTelemetryEvent('messagesApi.refusal',
 				{
 					requestId,
@@ -1191,19 +1162,6 @@ export class AnthropicMessagesProcessor {
 						0
 					);
 					this.logService.trace(`[messagesAPI] Anthropic context editing applied: cleared ${totalClearedTokens} tokens, ${totalClearedToolUses} tool uses.`);
-
-					/* __GDPR__
-						"contextEditingApplied" : {
-							"owner": "bhavyaus",
-							"comment": "Tracks when Anthropic context editing is applied to manage context window",
-							"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request ID for correlation" },
-							"interactionId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The interaction ID for correlation" },
-							"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model used" },
-							"clearedTokens": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total tokens cleared" },
-							"clearedToolUses": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total tool uses cleared" },
-							"clearedThinkingTurns": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true, "comment": "Total thinking turns cleared" }
-						}
-					*/
 					this.telemetryService.sendMSFTTelemetryEvent('contextEditingApplied',
 						{
 							requestId: this.requestId,
@@ -1220,16 +1178,6 @@ export class AnthropicMessagesProcessor {
 				if (this.stopReason === 'refusal') {
 					const category = this.stopDetails?.category ?? 'unknown';
 					this.logService.warn(`[messagesAPI] Refusal received: category='${category}' for model ${this.model}`);
-
-					/* __GDPR__
-						"messagesApi.refusal" : {
-							"owner": "bhavyaus",
-							"comment": "Tracks Anthropic refusal responses including cyber and other policy categories",
-							"requestId": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The request ID for correlation" },
-							"model": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The model that produced the refusal" },
-							"category": { "classification": "SystemMetaData", "purpose": "FeatureInsight", "comment": "The refusal category (e.g. cyber, content_policy)" }
-						}
-					*/
 					this.telemetryService.sendMSFTTelemetryEvent('messagesApi.refusal',
 						{
 							requestId: this.requestId,
